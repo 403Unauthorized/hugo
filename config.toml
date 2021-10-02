@@ -1,5 +1,5 @@
 baseURL = 'http://403unauthorized.github.io/hugo'
-defaultContentLanguage = 'zh-cn'
+defaultContentLanguage = 'en'
 title = "Torres' Blog"
 hasCJKLanguage = true
 theme = 'LoveIt'
