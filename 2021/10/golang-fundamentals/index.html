@@ -1,0 +1,390 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Golang 基础知识 - Torres' 技术博客</title><meta name=Description content="记录我的学习之路"><meta property="og:title" content="Golang 基础知识">
+<meta property="og:description" content="Hello Golang Golang 是由 Google 开发并开源出来的一种编程语言，Kubernetes 就是由 Go 主要开发的，由此可见 Go 在云原生开发中的重要地位。在这里我们主要介绍 Golang 的">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/"><meta property="og:image" content="http://403unauthorized.github.io/logo.ico"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-02T10:49:14+09:00">
+<meta property="article:modified_time" content="2021-10-02T21:02:25+09:00"><meta property="og:site_name" content="Torres' 技术博客">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://403unauthorized.github.io/logo.ico">
+<meta name=twitter:title content="Golang 基础知识">
+<meta name=twitter:description content="Hello Golang Golang 是由 Google 开发并开源出来的一种编程语言，Kubernetes 就是由 Go 主要开发的，由此可见 Go 在云原生开发中的重要地位。在这里我们主要介绍 Golang 的">
+<meta name=application-name content="Torres' Blog">
+<meta name=apple-mobile-web-app-title content="Torres' Blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/><link rel=next href=http://403unauthorized.github.io/hugo/2021/10/kubenetes-on-centos/><link rel=stylesheet href=/hugo/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/hugo/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/hugo/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/hugo/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Golang 基础知识","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/hugo\/2021\/10\/golang-fundamentals\/"},"genre":"posts","keywords":"Golang","wordcount":1312,"url":"http:\/\/403unauthorized.github.io\/hugo\/2021\/10\/golang-fundamentals\/","datePublished":"2021-10-02T10:49:14+09:00","dateModified":"2021-10-02T21:02:25+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/hugo/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/hugo/hugo/posts/> 文章 </a><a class=menu-item href=/hugo/hugo/tags/> 标签 </a><a class=menu-item href=/hugo/hugo/categories/> 分类 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/hugo/en/2021/10/golang-fundamentals/>English</option><option value=/hugo/2021/10/golang-fundamentals/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/hugo/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/hugo/hugo/posts/ title>文章</a><a class=menu-item href=/hugo/hugo/tags/ title>标签</a><a class=menu-item href=/hugo/hugo/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/hugo/en/2021/10/golang-fundamentals/>English</option><option value=/hugo/2021/10/golang-fundamentals/ selected>简体中文</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Golang 基础知识</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/hugo/ title=Author rel=" author" class=author><i class="fas fa-user-circle fa-fw"></i>Torres</a></span>&nbsp;<span class=post-category>收录于 <a href=/hugo/categories/programming/><i class="far fa-folder fa-fw"></i>Programming</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-10-02>2021-10-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1312 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/hugo/svg/loading.min.svg data-src=/images/posts/golang-fundamentals/golang-fundamentals.png data-srcset="/images/posts/golang-fundamentals/golang-fundamentals.png, /images/posts/golang-fundamentals/golang-fundamentals.png 1.5x, /images/posts/golang-fundamentals/golang-fundamentals.png 2x" data-sizes=auto alt=/images/posts/golang-fundamentals/golang-fundamentals.png title=/images/posts/golang-fundamentals/golang-fundamentals.png></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#hello-golang>Hello Golang</a></li>
+<li><a href=#声明和赋值>声明和赋值</a></li>
+<li><a href=#基础数据类型>基础数据类型</a>
+<ul>
+<li><a href=#整型>整型</a></li>
+<li><a href=#浮点型>浮点型</a></li>
+</ul>
+</li>
+<li><a href=#集合类型>集合类型</a>
+<ul>
+<li><a href=#数组>数组</a></li>
+<li><a href=#slice>Slice</a></li>
+<li><a href=#map>Map</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div><div class=content id=content><h2 id=hello-golang>Hello Golang</h2>
+<p>Golang 是由 Google 开发并开源出来的一种编程语言，Kubernetes 就是由 Go 主要开发的，由此可见 Go 在云原生开发中的重要地位。在这里我们主要介绍 Golang 的基础知识，例如各种语法，数据结构，以及一些 Tips。</p>
+<h2 id=声明和赋值>声明和赋值</h2>
+<p>Go 中声明变量和给变量赋值的方法和 JavaScript 比较相似。如下：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=c1>// var 是声明变量的关键字，如果只声明变量而不给它赋值
+</span><span class=c1>// 则该变量会被赋值为该类型的零值（zero value）
+</span><span class=c1></span><span class=kd>var</span> <span class=nx>num</span> <span class=kt>int</span>
+
+<span class=c1>// := 是声明并赋值的操作符
+</span><span class=c1>// 其工作流程为：
+</span><span class=c1>// 1. 声明一个名为 num 的变量
+</span><span class=c1>// 2. 将 10 赋值给变量 num
+</span><span class=c1></span><span class=nx>num</span> <span class=o>:=</span> <span class=mi>10</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>但是要注意的是，每个类型的零值不相同，比如说 <code>int</code> 的零值为 0，浮点类型的零值为 0.0，而 <code>string</code> 的零值为空字符串：""&mldr; 如 <code>struct</code> 或者指针类型的变量，零值为 <code>nil</code>。</p>
+</blockquote>
+<h2 id=基础数据类型>基础数据类型</h2>
+<p>Go 的基础数据类型和其他的编程语言相似，在这里我们介绍一下 Go 中的整型、字符串、浮点型、布尔型等：</p>
+<h3 id=整型>整型</h3>
+<p><strong>有符号整型</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:left>类型</th>
+<th style=text-align:left>大小</th>
+<th style=text-align:left>范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:left>int8</td>
+<td style=text-align:left>8 bits</td>
+<td style=text-align:left>-128 to 127</td>
+</tr>
+<tr>
+<td style=text-align:left>int16</td>
+<td style=text-align:left>16 bits</td>
+<td style=text-align:left>-215 to 215 -1</td>
+</tr>
+<tr>
+<td style=text-align:left>int32</td>
+<td style=text-align:left>32 bits</td>
+<td style=text-align:left>-231 to 231 -1</td>
+</tr>
+<tr>
+<td style=text-align:left>int64</td>
+<td style=text-align:left>64 bits</td>
+<td style=text-align:left>-263 to 263 -1</td>
+</tr>
+<tr>
+<td style=text-align:left>int</td>
+<td style=text-align:left>取决于平台</td>
+<td style=text-align:left>取决于平台</td>
+</tr>
+</tbody>
+</table>
+<p><code>int</code> 的大小取决于平台，在32位系统中它是32位的，而在64位系统中，它是64位。</p>
+<p><strong>无符号整型</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:left>类型</th>
+<th style=text-align:left>大小</th>
+<th style=text-align:left>范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:left>uint8</td>
+<td style=text-align:left>8 bits</td>
+<td style=text-align:left>0 to 255</td>
+</tr>
+<tr>
+<td style=text-align:left>uint16</td>
+<td style=text-align:left>16 bits</td>
+<td style=text-align:left>0 to 216 -1</td>
+</tr>
+<tr>
+<td style=text-align:left>uint32</td>
+<td style=text-align:left>32 bits</td>
+<td style=text-align:left>0 to 232 -1</td>
+</tr>
+<tr>
+<td style=text-align:left>uint64</td>
+<td style=text-align:left>64 bits</td>
+<td style=text-align:left>0 to 264 -1</td>
+</tr>
+<tr>
+<td style=text-align:left>uint</td>
+<td style=text-align:left>取决于平台</td>
+<td style=text-align:left>取决于平台</td>
+</tr>
+</tbody>
+</table>
+<p><code>uint</code> 和 <code>int</code> 的大小一样取决于所在的平台。</p>
+<blockquote>
+<p>提示：当你使用 integer 类型的值时，除非你有更好的原因去使用无符号整型或者带位数的整型类型，否则请使用 <code>int</code> .</p>
+</blockquote>
+<p>Golang 中还有两个额外的类型可以表示整型：</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:left>类型</th>
+<th style=text-align:left>表示为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:left>byte</td>
+<td style=text-align:left>uint8</td>
+</tr>
+<tr>
+<td style=text-align:left>rune</td>
+<td style=text-align:left>int32</td>
+</tr>
+</tbody>
+</table>
+<p>在 Go 中，<code>rune</code> 和 <code>byte</code>是用来区分字符和整型类型的。Go 中没有 <code>char</code> 类型，它用 <code>rune</code> 和 <code>byte</code> 来表示字符（但是它们本质上都是整数类型）：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kd>var</span> <span class=nx>firstLetter</span> <span class=p>=</span> <span class=sc>&#39;A&#39;</span> <span class=c1>// Type inferred as `rune` (Default type for character values)
+</span><span class=c1></span><span class=kd>var</span> <span class=nx>lastLetter</span> <span class=kt>byte</span> <span class=p>=</span> <span class=sc>&#39;Z&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>而 <code>byte</code> 可以转换成 ASCII 码中对应的数字，如 <code>firstLetter</code> 可以转换成 65。<code>rune</code> 变量能转换为 Unicode 中对应的编码。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>main</span>
+<span class=kn>import</span> <span class=s>&#34;fmt&#34;</span>
+
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+	<span class=kd>var</span> <span class=nx>myByte</span> <span class=kt>byte</span> <span class=p>=</span> <span class=sc>&#39;a&#39;</span>
+	<span class=kd>var</span> <span class=nx>myRune</span> <span class=kt>rune</span> <span class=p>=</span> <span class=sc>&#39;♥&#39;</span>
+
+	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;%c = %d and %c = %U\n&#34;</span><span class=p>,</span> <span class=nx>myByte</span><span class=p>,</span> <span class=nx>myByte</span><span class=p>,</span> <span class=nx>myRune</span><span class=p>,</span> <span class=nx>myRune</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=err>#</span> <span class=nx>Output</span>
+<span class=nx>a</span> <span class=p>=</span> <span class=mi>97</span> <span class=nx>and</span> <span class=err>♥</span> <span class=p>=</span> <span class=nx>U</span><span class=o>+</span><span class=mi>2665</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到 a 被转成了 97，Unicode 值 &lsquo;♥&rsquo; 被转换成了对应的 Unicode 码：<code>U+2665</code>。<em>U</em> 代表 Unicode，后面的数字则是16进制的整数。</p>
+<h3 id=浮点型>浮点型</h3>
+<p>浮点类型的数字包括两种：</p>
+<ul>
+<li><strong>float32</strong>：在内存中占用 32 bits，以单精度浮点格式存储值。</li>
+<li><strong>float64</strong>：在内存中占用 64 bits，以双精度浮点格式存储值。</li>
+</ul>
+<h2 id=集合类型>集合类型</h2>
+<h3 id=数组>数组</h3>
+<p>在 Go 中，数组是<strong>固定长度</strong>的数据类型，包含相同类型元素的<strong>连续内存块</strong>。定义数组的代码如下：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=c1>// 声明一个长度为5的数组，默认初始化每个元素为0（参考上面说到的零值）
+</span><span class=c1></span><span class=kd>var</span> <span class=nx>arr</span> <span class=p>[</span><span class=mi>5</span><span class=p>]</span><span class=kt>int</span>
+
+<span class=c1>// 声明并初始化一个长度为5的数组
+</span><span class=c1></span><span class=nx>arr</span> <span class=o>:=</span> <span class=p>[</span><span class=mi>5</span><span class=p>]</span><span class=kt>int</span><span class=p>{</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>4</span><span class=p>,</span><span class=mi>5</span><span class=p>}</span>
+
+<span class=c1>// 声明一个int数组，Go会基于初始化元素的个数来决定其长度
+</span><span class=c1></span><span class=nx>arr</span> <span class=o>:=</span> <span class=p>[</span><span class=o>...</span><span class=p>]</span><span class=kt>int</span><span class=p>{</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>3</span><span class=p>}</span>
+
+<span class=c1>// 声明一个长度为5的int数组，但是只初始化指定位置的元素
+</span><span class=c1></span><span class=nx>arr</span> <span class=o>:=</span> <span class=p>[</span><span class=mi>5</span><span class=p>]</span><span class=kt>int</span><span class=p>{</span><span class=mi>1</span><span class=p>:</span> <span class=mi>20</span><span class=p>,</span> <span class=mi>3</span><span class=p>:</span> <span class=mi>40</span><span class=p>}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>注意</strong>：</p>
+<ol>
+<li>数组只要被声明之后，就无法再更改其长度和类型了。</li>
+<li>在 functions 之间传递数组是非常昂贵的，如果是在需要传递数组，可以考虑传递它的指针。
+<ol>
+<li>声明一个一百万个元素的 int 数组，在64位操作系统上会占用 8MB 内存。</li>
+<li>而在 function 之间传递时，每调用一次 function，都会在栈中分配一个 8MB 的空间给这个数组。</li>
+<li>而传递这个数组的指针则会更高效，指针对象只会占用8个字节空间。</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<h3 id=slice>Slice</h3>
+<h3 id=map>Map</h3>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2021-10-02&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/dd9cd1c017f7e3190ee1c767dd2dfea40921ec5a target=_blank title="commit by Yongqi Lei(leiyongqi1026@gmail.com) dd9cd1c017f7e3190ee1c767dd2dfea40921ec5a: Initial commit">
+<i class="fas fa-hashtag fa-fw"></i>dd9cd1c</a></span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="分享到 Linkedin" data-sharer=linkedin data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/ data-title="Golang 基础知识" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/><i class="fab fa-reddit fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/ data-title="Golang 基础知识"><i data-svg-src=/hugo/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/ data-title="Golang 基础知识" data-image=/images/posts/golang-fundamentals/golang-fundamentals.png><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 人人" data-sharer=renren data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/><i class="fab fa-renren fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/ data-title="Golang 基础知识"><i data-svg-src=/hugo/lib/simple-icons/icons/baidu.min.svg></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/ data-title="Golang 基础知识"><i class="fab fa-evernote fa-fw"></i></a><a href=javascript:void(0); title="分享到 Skype" data-sharer=skype data-url=http://403unauthorized.github.io/hugo/2021/10/golang-fundamentals/ data-title="Golang 基础知识"><i class="fab fa-skype fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/hugo/tags/golang/>Golang</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/hugo/>主页</a></span>
+</section>
+</div>
+<div class=post-nav>
+<a href=/hugo/2021/10/kubenetes-on-centos/ class=next rel=next title="Kubenetes on Centos">Kubenetes on Centos<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="fa fa-theater-masks"></i> </div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/hugo/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/hugo/lib/katex/katex.min.4710034e669c7ff17f823f9ba12cf8a36582d65b007f79cbc4a3c11d7db2e4ca.css integrity="sha256-RxADTmacf/F/gj+boSz4o2WC1lsAf3nLxKPBHX2y5Mo="><link rel=stylesheet href=/hugo/lib/katex/copy-tex.min.bf9ff4137fec38f6255419e142d0883c9c52090885d746f80eee12b273d9b3e0.css integrity="sha256-v5/0E3/sOPYlVBnhQtCIPJxSCQiF10b4Du4SsnPZs+A="><script type=text/javascript src=https://torres-blog.disqus.com/embed.js defer></script><script type=text/javascript src=/hugo/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/hugo/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/hugo/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/hugo/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/hugo/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/hugo/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/hugo/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript src=/hugo/lib/sharer/sharer.min.9c88f86c7f0820287113f6236200459832693656e80d7556cc80a93dfbd45813.js integrity="sha256-nIj4bH8IIChxE/YjYgBFmDJpNlboDXVWzICpPfvUWBM="></script><script type=text/javascript src=/hugo/lib/typeit/typeit.min.491c13689db70b6adb3176a9a792644be7578a2f931521f5cb199d313a21c359.js integrity="sha256-SRwTaJ23C2rbMXapp5JkS+dXii+TFSH1yxmdMTohw1k="></script><script type=text/javascript src=/hugo/lib/katex/katex.min.17f5dd6b9f123dd7140abfb18521b3f4c036cd004f6f40121182a8865f140877.js integrity="sha256-F/Xda58SPdcUCr+xhSGz9MA2zQBPb0ASEYKohl8UCHc="></script><script type=text/javascript src=/hugo/lib/katex/auto-render.min.f74776a677f0d2be0af0264058f928e2ba455d0b19bc985304660d922a43a6b2.js integrity="sha256-90d2pnfw0r4K8CZAWPko4rpFXQsZvJhTBGYNkipDprI="></script><script type=text/javascript src=/hugo/lib/katex/copy-tex.min.2ab2237329021bc443986c8327f6e61357fb68a54e5d233d224023718c02207d.js integrity="sha256-KrIjcykCG8RDmGyDJ/bmE1f7aKVOXSM9IkAjcYwCIH0="></script><script type=text/javascript src=/hugo/lib/katex/mhchem.min.5cea356d6025c5a2f18c454c83ec5674dbb04fab1cd1d75569e77788c6b6f888.js integrity="sha256-XOo1bWAlxaLxjEVMg+xWdNuwT6sc0ddVaed3iMa2+Ig="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:10},comment:{},data:{"id-1":"Torres","id-2":"Torres"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/hugo/index.json",lunrLanguageCode:"zh",lunrSegmentitURL:"/hugo/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"lunr"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/hugo/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>

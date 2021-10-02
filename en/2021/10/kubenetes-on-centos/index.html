@@ -1,0 +1,907 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Kubenetes on Centos - Torres' Tech Blog</title><meta name=Description content="记录我的学习之路"><meta property="og:title" content="Kubenetes on Centos">
+<meta property="og:description" content="Prerequisite A compatible Linux host. The Kubernetes project provides generic instructions for Linux distributions based on Debian and Red Hat, and those distributions without a package manager. 2 GB or more of RAM per machine (any less will leave little room for your apps). 2 CPUs or more. Full network connectivity between all machines in the cluster (public or private network is fine). Unique hostname, MAC address, and product_uuid for">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/"><meta property="og:image" content="http://403unauthorized.github.io/logo.ico"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-02T15:21:26+09:00">
+<meta property="article:modified_time" content="2021-10-02T21:02:25+09:00"><meta property="og:site_name" content="Torres' Tech Blog">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://403unauthorized.github.io/logo.ico">
+<meta name=twitter:title content="Kubenetes on Centos">
+<meta name=twitter:description content="Prerequisite A compatible Linux host. The Kubernetes project provides generic instructions for Linux distributions based on Debian and Red Hat, and those distributions without a package manager. 2 GB or more of RAM per machine (any less will leave little room for your apps). 2 CPUs or more. Full network connectivity between all machines in the cluster (public or private network is fine). Unique hostname, MAC address, and product_uuid for">
+<meta name=application-name content="Torres' Blog">
+<meta name=apple-mobile-web-app-title content="Torres' Blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/><link rel=prev href=http://403unauthorized.github.io/hugo/en/2021/10/golang-fundamentals/><link rel=stylesheet href=/hugo/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/hugo/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/hugo/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/hugo/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubenetes on Centos","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/hugo\/en\/2021\/10\/kubenetes-on-centos\/"},"genre":"posts","keywords":"Cloud Native, Kubernetes","wordcount":2351,"url":"http:\/\/403unauthorized.github.io\/hugo\/en\/2021\/10\/kubenetes-on-centos\/","datePublished":"2021-10-02T15:21:26+09:00","dateModified":"2021-10-02T21:02:25+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/hugo/en/ title="Torres' Tech Blog"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/hugo/en/hugo/posts/> Posts </a><a class=menu-item href=/hugo/en/hugo/tags/> Tags </a><a class=menu-item href=/hugo/en/hugo/categories/> Categories </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/hugo/en/2021/10/kubenetes-on-centos/ selected>English</option><option value=/hugo/2021/10/kubenetes-on-centos/>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/hugo/en/ title="Torres' Tech Blog"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/hugo/en/hugo/posts/ title>Posts</a><a class=menu-item href=/hugo/en/hugo/tags/ title>Tags</a><a class=menu-item href=/hugo/en/hugo/categories/ title>Categories</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/hugo/en/2021/10/kubenetes-on-centos/ selected>English</option><option value=/hugo/2021/10/kubenetes-on-centos/>简体中文</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Kubenetes on Centos</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/hugo/en/ title=Author rel=" author" class=author><i class="fas fa-user-circle fa-fw"></i>Torres</a></span>&nbsp;<span class=post-category>included in <a href=/hugo/en/categories/kubernetes/><i class="far fa-folder fa-fw"></i>Kubernetes</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-10-02>2021-10-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2351 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/hugo/svg/loading.min.svg data-src=/images/posts/kubernetes-on-centos/kubernetes-on-centos.png data-srcset="/images/posts/kubernetes-on-centos/kubernetes-on-centos.png, /images/posts/kubernetes-on-centos/kubernetes-on-centos.png 1.5x, /images/posts/kubernetes-on-centos/kubernetes-on-centos.png 2x" data-sizes=auto alt=/images/posts/kubernetes-on-centos/kubernetes-on-centos.png title=/images/posts/kubernetes-on-centos/kubernetes-on-centos.png></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#prerequisite>Prerequisite</a>
+<ul>
+<li><a href=#letting-iptables-see-bridged-traffic>Letting iptables see bridged traffic</a></li>
+<li><a href=#check-required-ports>Check Required Ports</a></li>
+<li><a href=#install-docker>Install Docker</a></li>
+</ul>
+</li>
+<li><a href=#install-kubernetes>Install Kubernetes</a>
+<ul>
+<li><a href=#prepare-kubernetes-servers>Prepare Kubernetes Servers</a></li>
+<li><a href=#install-kubeadm-and-kubectl>Install kubeadm and kubectl</a></li>
+<li><a href=#disable-selinux-and-swap>Disable SELinux and Swap</a></li>
+</ul>
+</li>
+<li><a href=#configure-firewall>Configure Firewall</a></li>
+<li><a href=#verify-the-installation>Verify the installation</a>
+<ul>
+<li><a href=#initialize-kubernetes-control-plane>Initialize Kubernetes Control Plane</a></li>
+<li><a href=#verification>Verification</a></li>
+</ul>
+</li>
+<li><a href=#install-network-plugin---calico>Install network plugin - Calico</a></li>
+<li><a href=#install-kubernetes-dashboard>Install Kubernetes Dashboard</a>
+<ul>
+<li><a href=#kubernetes-dashboard>Kubernetes Dashboard</a></li>
+</ul>
+</li>
+<li><a href=#conclusion>Conclusion</a></li>
+<li><a href=#reference>Reference</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><h2 id=prerequisite>Prerequisite</h2>
+<ul>
+<li>A compatible Linux host. The Kubernetes project provides generic instructions for Linux distributions based on Debian and Red Hat, and those distributions without a package manager.</li>
+<li>2 GB or more of RAM per machine (any less will leave little room for your apps).</li>
+<li>2 CPUs or more.</li>
+<li>Full network connectivity between all machines in the cluster (public or private network is fine).</li>
+<li>Unique hostname, MAC address, and product_uuid for every node. See <a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#verify-mac-address target=_blank rel="noopener noreffer">here</a> for more details.</li>
+<li>Certain ports are open on your machines. See <a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports target=_blank rel="noopener noreffer">here</a> for more details.</li>
+<li>Swap disabled. You <strong>MUST</strong> disable swap in order for the kubelet to work properly.</li>
+</ul>
+<h3 id=letting-iptables-see-bridged-traffic>Letting iptables see bridged traffic</h3>
+<p>Make sure that the <code>br_netfilter</code> module is loaded. This can be done by running <code>lsmod | grep br_netfilter</code>. To load it explicitly call <code>sudo modprobe br_netfilter</code>.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>lsmod <span class=p>|</span> grep br_netfilter
+<span class=c1># br_netfilter           22256  0 </span>
+<span class=c1># bridge                151336  2 br_netfilter,ebtable_broute</span>
+sudo modprobe br_netfilter
+</code></pre></td></tr></table>
+</div>
+</div><p>As a requirement for your Linux Node&rsquo;s iptables to correctly see bridged traffic, you should ensure <code>net.bridge.bridge-nf-call-iptables</code> is set to 1 in your <code>sysctl</code> config.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo tee /etc/sysctl.d/kubernetes.conf<span class=s>&lt;&lt;EOF
+</span><span class=s>net.bridge.bridge-nf-call-ip6tables = 1
+</span><span class=s>net.bridge.bridge-nf-call-iptables = 1
+</span><span class=s>net.ipv4.ip_forward = 1
+</span><span class=s>EOF</span>
+
+sudo sysctl --system
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=check-required-ports>Check Required Ports</h3>
+<h3 id=install-docker>Install Docker</h3>
+<p>Refer: <a href=https://docs.docker.com/engine/install/centos/ target=_blank rel="noopener noreffer">Install Docker Engine on CentOS</a></p>
+<h2 id=install-kubernetes>Install Kubernetes</h2>
+<h3 id=prepare-kubernetes-servers>Prepare Kubernetes Servers</h3>
+<table>
+<thead>
+<tr>
+<th style=text-align:left><strong>Server Type</strong></th>
+<th style=text-align:left><strong>Host Name</strong></th>
+<th style=text-align:left><strong>Specs</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:left>Master</td>
+<td style=text-align:left>192.168.2.60</td>
+<td style=text-align:left>2 CPUs, 2GB Ram</td>
+</tr>
+<tr>
+<td style=text-align:left>Worker</td>
+<td style=text-align:left>192.168.2.61</td>
+<td style=text-align:left>2 CPUs, 2GB Ram</td>
+</tr>
+<tr>
+<td style=text-align:left>Worker</td>
+<td style=text-align:left>192.168.2.62</td>
+<td style=text-align:left>2 CPUs, 2GB Ram</td>
+</tr>
+</tbody>
+</table>
+<p>Here I used a VM which has <strong>2 CPUs</strong> and <strong>4GB Ram</strong> for master node.</p>
+<h3 id=install-kubeadm-and-kubectl>Install kubeadm and kubectl</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+</span><span class=s>[kubernetes]
+</span><span class=s>name=Kubernetes
+</span><span class=s>baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+</span><span class=s>enabled=1
+</span><span class=s>gpgcheck=1
+</span><span class=s>repo_gpgcheck=1
+</span><span class=s>gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+</span><span class=s>exclude=kubelet kubeadm kubectl
+</span><span class=s>EOF</span>
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes<span class=o>=</span>kubernetes
+
+sudo systemctl <span class=nb>enable</span> --now kubelet
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=disable-selinux-and-swap>Disable SELinux and Swap</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># Set SELinux in permissive mode (effectively disabling it)</span>
+sudo setenforce <span class=m>0</span>
+sudo sed -i <span class=s1>&#39;s/^SELINUX=enforcing$/SELINUX=permissive/&#39;</span> /etc/selinux/config
+
+<span class=c1># Disable swap</span>
+sudo sed -i <span class=s1>&#39;/ swap / s/^\(.*\)$/#\1/g&#39;</span> /etc/fstab
+sudo swapoff -a
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=configure-firewall>Configure Firewall</h2>
+<p><strong>Enable Master Node Ports</strong>:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo firewall-cmd --add-port<span class=o>={</span>6443,2379-2380,10250,10251,10252,5473,179,5473<span class=o>}</span>/tcp --permanent
+sudo firewall-cmd --add-port<span class=o>={</span>4789,8285,8472<span class=o>}</span>/udp --permanent
+sudo firewall-cmd --reload
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>Enable Worker Node Ports</strong>:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo firewall-cmd --add-port<span class=o>={</span>10250,30000-32767,5473,179,5473<span class=o>}</span>/tcp --permanent
+sudo firewall-cmd --add-port<span class=o>={</span>4789,8285,8472<span class=o>}</span>/udp --permanent
+sudo firewall-cmd --reload
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=verify-the-installation>Verify the installation</h2>
+<p>In order to verify whether the installation is successful, we are gonna create a cluster using <em><strong>kubeadm</strong></em>.</p>
+<h3 id=initialize-kubernetes-control-plane>Initialize Kubernetes Control Plane</h3>
+<p>First of all, I added a host name to <code>/etc/hosts</code> , as below:</p>
+<blockquote>
+<p>192.168.2.60 k8s-master01 k8s-master01.torres.com</p>
+</blockquote>
+<p>Then I run below commands to initialize the control plane on master node:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># (Optional) You can run this commands to verify the connection with gcr.io</span>
+sudo kubeadm config images pull
+
+<span class=c1># Init Control plane</span>
+sudo kubeadm init --control-plane-endpoint<span class=o>=</span>k8s-master01.torres.com --node-name<span class=o>=</span>k8s-master01 --upload-certs 
+</code></pre></td></tr></table>
+</div>
+</div><p>Then you can see logs as follows:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>init<span class=o>]</span> Using Kubernetes version: v1.21.1
+<span class=o>[</span>preflight<span class=o>]</span> Running pre-flight checks
+	<span class=o>[</span>WARNING Firewalld<span class=o>]</span>: firewalld is active, please ensure ports <span class=o>[</span><span class=m>6443</span> 10250<span class=o>]</span> are open or your cluster may not <span class=k>function</span> correctly
+	<span class=o>[</span>WARNING IsDockerSystemdCheck<span class=o>]</span>: detected <span class=s2>&#34;cgroupfs&#34;</span> as the Docker cgroup driver. The recommended driver is <span class=s2>&#34;systemd&#34;</span>. Please follow the guide at https://kubernetes.io/docs/setup/cri/
+<span class=o>[</span>preflight<span class=o>]</span> Pulling images required <span class=k>for</span> setting up a Kubernetes cluster
+<span class=o>[</span>preflight<span class=o>]</span> This might take a minute or two, depending on the speed of your internet connection
+<span class=o>[</span>preflight<span class=o>]</span> You can also perform this action in beforehand using <span class=s1>&#39;kubeadm config images pull&#39;</span>
+<span class=o>[</span>certs<span class=o>]</span> Using certificateDir folder <span class=s2>&#34;/etc/kubernetes/pki&#34;</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;ca&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;apiserver&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> apiserver serving cert is signed <span class=k>for</span> DNS names <span class=o>[</span>k8s-master01 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local localhost.localdomain<span class=o>]</span> and IPs <span class=o>[</span>10.96.0.1 192.168.2.60<span class=o>]</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;apiserver-kubelet-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;front-proxy-ca&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;front-proxy-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/ca&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/server&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> etcd/server serving cert is signed <span class=k>for</span> DNS names <span class=o>[</span>localhost localhost.localdomain<span class=o>]</span> and IPs <span class=o>[</span>192.168.2.60 127.0.0.1 ::1<span class=o>]</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/peer&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> etcd/peer serving cert is signed <span class=k>for</span> DNS names <span class=o>[</span>localhost localhost.localdomain<span class=o>]</span> and IPs <span class=o>[</span>192.168.2.60 127.0.0.1 ::1<span class=o>]</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/healthcheck-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;apiserver-etcd-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;sa&#34;</span> key and public key
+<span class=o>[</span>kubeconfig<span class=o>]</span> Using kubeconfig folder <span class=s2>&#34;/etc/kubernetes&#34;</span>
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;admin.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;kubelet.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;controller-manager.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;scheduler.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubelet-start<span class=o>]</span> Writing kubelet environment file with flags to file <span class=s2>&#34;/var/lib/kubelet/kubeadm-flags.env&#34;</span>
+<span class=o>[</span>kubelet-start<span class=o>]</span> Writing kubelet configuration to file <span class=s2>&#34;/var/lib/kubelet/config.yaml&#34;</span>
+<span class=o>[</span>kubelet-start<span class=o>]</span> Starting the kubelet
+<span class=o>[</span>control-plane<span class=o>]</span> Using manifest folder <span class=s2>&#34;/etc/kubernetes/manifests&#34;</span>
+<span class=o>[</span>control-plane<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=s2>&#34;kube-apiserver&#34;</span>
+<span class=o>[</span>control-plane<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=s2>&#34;kube-controller-manager&#34;</span>
+<span class=o>[</span>control-plane<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=s2>&#34;kube-scheduler&#34;</span>
+<span class=o>[</span>etcd<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=nb>local</span> etcd in <span class=s2>&#34;/etc/kubernetes/manifests&#34;</span>
+<span class=o>[</span>wait-control-plane<span class=o>]</span> Waiting <span class=k>for</span> the kubelet to boot up the control plane as static Pods from directory <span class=s2>&#34;/etc/kubernetes/manifests&#34;</span>. This can take up to 4m0s
+<span class=o>[</span>apiclient<span class=o>]</span> All control plane components are healthy after 13.004835 seconds
+<span class=o>[</span>upload-config<span class=o>]</span> Storing the configuration used in ConfigMap <span class=s2>&#34;kubeadm-config&#34;</span> in the <span class=s2>&#34;kube-system&#34;</span> Namespace
+<span class=o>[</span>kubelet<span class=o>]</span> Creating a ConfigMap <span class=s2>&#34;kubelet-config-1.21&#34;</span> in namespace kube-system with the configuration <span class=k>for</span> the kubelets in the cluster
+<span class=o>[</span>upload-certs<span class=o>]</span> Storing the certificates in Secret <span class=s2>&#34;kubeadm-certs&#34;</span> in the <span class=s2>&#34;kube-system&#34;</span> Namespace
+<span class=o>[</span>upload-certs<span class=o>]</span> Using certificate key:
+b8cb86fb2bd01029d07cd1c67a6ae9ca358655595cef1cc7bec5253b64a81037
+<span class=o>[</span>mark-control-plane<span class=o>]</span> Marking the node localhost.localdomain as control-plane by adding the labels: <span class=o>[</span>node-role.kubernetes.io/master<span class=o>(</span>deprecated<span class=o>)</span> node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers<span class=o>]</span>
+<span class=o>[</span>mark-control-plane<span class=o>]</span> Marking the node localhost.localdomain as control-plane by adding the taints <span class=o>[</span>node-role.kubernetes.io/master:NoSchedule<span class=o>]</span>
+<span class=o>[</span>bootstrap-token<span class=o>]</span> Using token: tm2wqn.66pko8ldffracpfs
+<span class=o>[</span>bootstrap-token<span class=o>]</span> Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow Node Bootstrap tokens to get nodes
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order <span class=k>for</span> nodes to get long term certificate credentials
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow certificate rotation <span class=k>for</span> all node client certificates in the cluster
+<span class=o>[</span>bootstrap-token<span class=o>]</span> Creating the <span class=s2>&#34;cluster-info&#34;</span> ConfigMap in the <span class=s2>&#34;kube-public&#34;</span> namespace
+<span class=o>[</span>kubelet-finalize<span class=o>]</span> Updating <span class=s2>&#34;/etc/kubernetes/kubelet.conf&#34;</span> to point to a rotatable kubelet client certificate and key
+<span class=o>[</span>addons<span class=o>]</span> Applied essential addon: CoreDNS
+<span class=o>[</span>addons<span class=o>]</span> Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p <span class=nv>$HOME</span>/.kube
+  sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
+  sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
+
+Alternatively, <span class=k>if</span> you are the root user, you can run:
+
+  <span class=nb>export</span> <span class=nv>KUBECONFIG</span><span class=o>=</span>/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run <span class=s2>&#34;kubectl apply -f [podnetwork].yaml&#34;</span> with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of the control-plane node running the following <span class=nb>command</span> on each as root:
+
+  kubeadm join k8s-master01:6443 --token tm2wqn.66pko8ldffracpfs <span class=se>\
+</span><span class=se></span>	--discovery-token-ca-cert-hash sha256:470585a5c3c4706d86d06b23f1960a953960db666798266e528e6faf69981d2e <span class=se>\
+</span><span class=se></span>	--control-plane --certificate-key b8cb86fb2bd01029d07cd1c67a6ae9ca358655595cef1cc7bec5253b64a81037
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours<span class=p>;</span> If necessary, you can use
+<span class=s2>&#34;kubeadm init phase upload-certs --upload-certs&#34;</span> to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join k8s-master01:6443 --token tm2wqn.66pko8ldffracpfs <span class=se>\
+</span><span class=se></span>	--discovery-token-ca-cert-hash sha256:470585a5c3c4706d86d06b23f1960a953960db666798266e528e6faf69981d2e
+</code></pre></td></tr></table>
+</div>
+</div><p>As the logs says, we need to run these commands after the initialization:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>mkdir -p <span class=nv>$HOME</span>/.kube
+sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
+sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=verification>Verification</h3>
+<p>We can run this command to verify the cluster we just created:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl cluster-info
+
+Kubernetes control plane is running at https://k8s-master01:6443
+CoreDNS is running at https://k8s-master01:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use <span class=s1>&#39;kubectl cluster-info dump&#39;</span>.
+</code></pre></td></tr></table>
+</div>
+</div><p>Also if you want to see the nodes:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl get nodes
+
+NAME                    STATUS     ROLES                  AGE     VERSION
+localhost.localdomain   NotReady   control-plane,master   3m15s   v1.21.1
+</code></pre></td></tr></table>
+</div>
+</div><p>If you see the status of the nodes you created is not ready, you can check if all the pods in the node is <strong>RUNNING</strong>:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl get pods --all-namespaces
+
+NAMESPACE     NAME                                            READY   STATUS    RESTARTS   AGE
+kube-system   coredns-558bd4d5db-9szx5                        0/1     Pending   <span class=m>0</span>          7m31s
+kube-system   coredns-558bd4d5db-lx7jv                        0/1     Pending   <span class=m>0</span>          7m31s
+kube-system   etcd-localhost.localdomain                      1/1     Running   <span class=m>0</span>          7m36s
+kube-system   kube-apiserver-localhost.localdomain            1/1     Running   <span class=m>0</span>          7m36s
+kube-system   kube-controller-manager-localhost.localdomain   1/1     Running   <span class=m>0</span>          7m36s
+kube-system   kube-proxy-2skgn                                1/1     Running   <span class=m>0</span>          7m31s
+kube-system   kube-scheduler-localhost.localdomain            1/1     Running   <span class=m>0</span>          7m38s
+</code></pre></td></tr></table>
+</div>
+</div><p>The <strong>coredns</strong> is still Pending, so we have to install a network plugin to make the coredns work.</p>
+<h2 id=install-network-plugin---calico>Install network plugin - Calico</h2>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+onfigmap/calico-config created
+customresourcedefinition.apiextensions.k8s.io/bgpconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/bgppeers.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/clusterinformations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/felixconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworkpolicies.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworksets.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/hostendpoints.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamblocks.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamconfigs.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamhandles.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ippools.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/kubecontrollersconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/networkpolicies.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/networksets.crd.projectcalico.org created
+clusterrole.rbac.authorization.k8s.io/calico-kube-controllers created
+clusterrolebinding.rbac.authorization.k8s.io/calico-kube-controllers created
+clusterrole.rbac.authorization.k8s.io/calico-node created
+clusterrolebinding.rbac.authorization.k8s.io/calico-node created
+daemonset.apps/calico-node created
+serviceaccount/calico-node created
+deployment.apps/calico-kube-controllers created
+serviceaccount/calico-kube-controllers created
+Warning: policy/v1beta1 PodDisruptionBudget is deprecated in v1.21+, unavailable in v1.25+<span class=p>;</span> use policy/v1 PodDisruptionBudget
+poddisruptionbudget.policy/calico-kube-controllers created
+</code></pre></td></tr></table>
+</div>
+</div><p>Then run following command to see the service:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl get pods --all-namespaces
+
+NAMESPACE     NAME                                            READY   STATUS    RESTARTS   AGE
+kube-system   calico-kube-controllers-78d6f96c7b-9kd5b        1/1     Running   <span class=m>0</span>          6m57s
+kube-system   calico-node-f8fsw                               1/1     Running   <span class=m>0</span>          6m57s
+kube-system   coredns-558bd4d5db-9szx5                        1/1     Running   <span class=m>0</span>          14m
+kube-system   coredns-558bd4d5db-lx7jv                        1/1     Running   <span class=m>0</span>          14m
+kube-system   etcd-localhost.localdomain                      1/1     Running   <span class=m>0</span>          14m
+kube-system   kube-apiserver-localhost.localdomain            1/1     Running   <span class=m>0</span>          14m
+kube-system   kube-controller-manager-localhost.localdomain   1/1     Running   <span class=m>0</span>          14m
+kube-system   kube-proxy-2skgn                                1/1     Running   <span class=m>0</span>          14m
+kube-system   kube-scheduler-localhost.localdomain            1/1     Running   <span class=m>0</span>          14m
+</code></pre></td></tr></table>
+</div>
+</div><p>After the installation of Network Plugin (Calico), we can see <strong>coredns</strong> is Running, and there are another two pods for calico network plugin.</p>
+<p>Now, we are going to install Kubernetes Dashboard!</p>
+<h2 id=install-kubernetes-dashboard>Install Kubernetes Dashboard</h2>
+<p>By default, the dashboar ui is not deployed, so we need to do it manually with following command:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+
+<span class=c1># Then you can use this command to see the dashboard is running</span>
+kubectl get pods --all-namespaces
+
+NAMESPACE              NAME                                            READY   STATUS    RESTARTS   AGE
+kube-system            calico-kube-controllers-78d6f96c7b-9kd5b        1/1     Running   <span class=m>0</span>          9m41s
+kube-system            calico-node-f8fsw                               1/1     Running   <span class=m>0</span>          9m41s
+kube-system            coredns-558bd4d5db-9szx5                        1/1     Running   <span class=m>0</span>          17m
+kube-system            coredns-558bd4d5db-lx7jv                        1/1     Running   <span class=m>0</span>          17m
+kube-system            etcd-localhost.localdomain                      1/1     Running   <span class=m>0</span>          17m
+kube-system            kube-apiserver-localhost.localdomain            1/1     Running   <span class=m>0</span>          17m
+kube-system            kube-controller-manager-localhost.localdomain   1/1     Running   <span class=m>0</span>          17m
+kube-system            kube-proxy-2skgn                                1/1     Running   <span class=m>0</span>          17m
+kube-system            kube-scheduler-localhost.localdomain            1/1     Running   <span class=m>0</span>          17m
+kubernetes-dashboard   dashboard-metrics-scraper-856586f554-p7gxx      1/1     Running   <span class=m>0</span>          44s
+kubernetes-dashboard   kubernetes-dashboard-78c79f97b4-qs57f           1/1     Running   <span class=m>0</span>          45s
+</code></pre></td></tr></table>
+</div>
+</div><p>The yaml file above is a recommended config for production environment, it helps us to create service, service account, cluster role and deployment for kubernetes dashboard.</p>
+<p>You can access Dashboard using the kubectl command-line tool by running the following command:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl proxy
+</code></pre></td></tr></table>
+</div>
+</div><p>This will start serving at <code>localhost:8001</code> by default. Then you can access http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/ to see your dashboard.</p>
+<p>But there are some optional parameters for the command:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl proxy --address<span class=o>=</span><span class=s1>&#39;192.168.2.60&#39;</span> --port<span class=o>=</span><span class=m>9001</span> --accept-hosts<span class=o>=</span><span class=s1>&#39;^*$&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>--address</code>: The IP address on which to serve on.</p>
+<p><code>-p --port</code>: The port on which to run the proxy. Set to 0 to pick a random port.</p>
+<p><code>--accept-hosts</code>: Regular expression for hosts that the proxy should accept. (使用正则表达式指定proxy应该接收的hosts)</p>
+<p><code>--api-prefix='/'</code>: Prefix to serve the proxied API under.</p>
+<p>For more details of the command, please use <code>kubectl proxy --help</code>.</p>
+<h3 id=kubernetes-dashboard>Kubernetes Dashboard</h3>
+<p>When every pod of kubenetes-dashboard is running, then you can access the dashboard.</p>
+<p><img class=lazyload src=/hugo/svg/loading.min.svg data-src=/images/kubernetes-on-centos_1.png data-srcset="/images/kubernetes-on-centos_1.png, /images/kubernetes-on-centos_1.png 1.5x, /images/kubernetes-on-centos_1.png 2x" data-sizes=auto alt=/images/kubernetes-on-centos_1.png title="Kubernetes Dashboard"></p>
+<p>Now you can see the dashboar login screen, but it requires authentication at login.</p>
+<p>So you need to find the <strong>Token</strong> or <strong>Kubeconfig</strong> to sign in with following commands:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># See secret in kubernetes-dashboard namespace</span>
+kubectl -n kubernetes-dashboard get secret
+
+NAME                               TYPE                                  DATA   AGE
+default-token-p7rgf                kubernetes.io/service-account-token   <span class=m>3</span>      27m
+kubernetes-dashboard-certs         Opaque                                <span class=m>0</span>      27m
+kubernetes-dashboard-csrf          Opaque                                <span class=m>1</span>      27m
+kubernetes-dashboard-key-holder    Opaque                                <span class=m>2</span>      27m
+kubernetes-dashboard-token-8kjgr   kubernetes.io/service-account-token   <span class=m>3</span>      27m
+
+<span class=c1># Get details of token</span>
+kubectl -n kubernetes-dashboard describe secret kubernetes-dashboard-token-8kjgr
+
+Name:         kubernetes-dashboard-token-8kjgr
+Namespace:    kubernetes-dashboard
+Labels:       &lt;none&gt;
+Annotations:  kubernetes.io/service-account.name: kubernetes-dashboard
+              kubernetes.io/service-account.uid: d54e2160-e9b0-444d-93fc-5d38f8fa61ef
+
+Type:  kubernetes.io/service-account-token
+
+<span class=nv>Data</span>
+<span class=o>====</span>
+ca.crt:     <span class=m>1066</span> bytes
+namespace:  <span class=m>20</span> bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImNKX2pGTG9fUXE0cmk1cE5oUkpPYzVoald2TXFWN2QySHBEV1RlclNlMWcifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC10b2tlbi04a2pnciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImQ1NGUyMTYwLWU5YjAtNDQ0ZC05M2ZjLTVkMzhmOGZhNjFlZiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlcm5ldGVzLWRhc2hib2FyZDprdWJlcm5ldGVzLWRhc2hib2FyZCJ9.YbuWfZ3Qu9hjQTEVpuR7FxGrjboO8OpjqY4tE1O86v9UD9OilCbb330QRCNbTPcobLfXvFHRsJ4MVY2LHaCM1s2y2fpGE3dGPpPs2XcLJj2Aw3e_mJKHy9sZHtjfAG0cFgWKhyr_LTEuxk3_0pEVMKtuk2WeSqoo37ADhUjR92G7dK0TGkahkNzOH0-I_Yn40oZn9wA9w0r4DCGd5q8s2c5piHd6jGOuRX-7_UKgVfc6GYkRngAsrVZTnqfZkjv0LoH8Egkmu2X3CRvMz4JrlyhScTPZ77Uck0PXVklU57tK1PdgPIcczlvVJtr4avyBZsS5Y9j5zjm7sSDvPMeuJQ
+</code></pre></td></tr></table>
+</div>
+</div><p>Then you can use the token to sign into Kubernetes Dashboard.</p>
+<blockquote>
+<p>But this account do not have any permissions to all the content on dashboard, we need to create an admin account.</p>
+</blockquote>
+<p><img class=lazyload src=/hugo/svg/loading.min.svg data-src=/images/kubernetes-on-centos_2.png data-srcset="/images/kubernetes-on-centos_2.png, /images/kubernetes-on-centos_2.png 1.5x, /images/kubernetes-on-centos_2.png 2x" data-sizes=auto alt=/images/kubernetes-on-centos_2.png title="Kubernetes Dashboard 2"></p>
+<p>But there is no deployments, no pods… (Because of the permission of serviceaccount:kubernetes-dashboard: <strong>&ldquo;system:serviceaccount:kubernetes-dashboard:kubernetes-dashboard&rdquo; cannot list resource &ldquo;replicationcontrollers&rdquo; in API group "" in the namespace &ldquo;default&rdquo;</strong>)</p>
+<p>I will add tutorial for adding cluster role and service account into kubernetes.</p>
+<h2 id=conclusion>Conclusion</h2>
+<p>If you want to reload the certs afterward, run this command:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubeadm init phase upload-certs --upload-certs
+</code></pre></td></tr></table>
+</div>
+</div><p>Join cluster with master node:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubeadm join k8s-master01:6443 --token 0yj7hj.u6i2pv98o522rt99 <span class=se>\
+</span><span class=se></span>	--discovery-token-ca-cert-hash sha256:a4507c9a70a7c36543f4913b8a636c2b8a24a73ff4aefec6dd43144a40188437 <span class=se>\
+</span><span class=se></span>	--control-plane --certificate-key 82441af4e2a70d7de93a15dbdde52a165e1cf6184d98c9ccd4b2d64bc01d55c8
+</code></pre></td></tr></table>
+</div>
+</div><p>Join cluster with worker node:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubeadm join k8s-master01:6443 --token 0yj7hj.u6i2pv98o522rt99 <span class=se>\
+</span><span class=se></span>	--discovery-token-ca-cert-hash sha256:a4507c9a70a7c36543f4913b8a636c2b8a24a73ff4aefec6dd43144a40188437
+</code></pre></td></tr></table>
+</div>
+</div><p>How to access kubernetes dashboard remotely: (Kubernetes Dashboard is in your virtual machine, but you want to access it on local machine)</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># command</span>
+ssh -L &lt;port whatever you like&gt;:127.0.0.1:8001 -N -f -l &lt;username of kubernetes server&gt; &lt;kubernetes server ip&gt; -P <span class=m>22</span>
+<span class=c1># Example</span>
+ssh -L 8001:127.0.0.1:8001 -N -f -l leiyongqi 192.168.2.60 -P <span class=m>22</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>Tips</strong></p>
+<p>If you specify an address for proxy, if you want to access on local machine rather than virtual machine, you need to change the command above:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>ssh -L &lt;port whatever you like&gt;:&lt;the address you specified in kubectl proxy command&gt;:8001 -N -f -l &lt;username of kubernetes server&gt; &lt;kubernetes server ip&gt; -P <span class=m>22</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=reference>Reference</h2>
+<p><a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/ target=_blank rel="noopener noreffer">Creating a cluster with kubeadm</a></p>
+<p><a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/ target=_blank rel="noopener noreffer">Creating Highly Available clusters with kubeadm</a></p>
+<p><a href=https://docs.docker.com/engine/install/centos/ target=_blank rel="noopener noreffer">Install Docker Engine on CentOS</a></p>
+<p><a href=https://stackoverflow.com/questions/59006501/how-can-i-remotely-access-kubernetes-dashboard-with-token target=_blank rel="noopener noreffer">How can I remotely access kubernetes dashboard with token</a></p>
+<p><a href=https://stackoverflow.com/questions/52893111/no-endpoints-available-for-service-kubernetes-dashboard target=_blank rel="noopener noreffer">no endpoints available for service "kubernetes-dashboard"</a></p>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2021-10-02&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/dd9cd1c017f7e3190ee1c767dd2dfea40921ec5a target=_blank title="commit by Yongqi Lei(leiyongqi1026@gmail.com) dd9cd1c017f7e3190ee1c767dd2dfea40921ec5a: Initial commit">
+<i class="fas fa-hashtag fa-fw"></i>dd9cd1c</a></span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on WhatsApp" data-sharer=whatsapp data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="Share on Reddit" data-sharer=reddit data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/><i class="fab fa-reddit fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i data-svg-src=/hugo/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos" data-image=/images/posts/kubernetes-on-centos/kubernetes-on-centos.png><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="Share on 人人" data-sharer=renren data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/><i class="fab fa-renren fa-fw"></i></a><a href=javascript:void(0); title="Share on 百度" data-sharer=baidu data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i data-svg-src=/hugo/lib/simple-icons/icons/baidu.min.svg></i></a><a href=javascript:void(0); title="Share on Evernote" data-sharer=evernote data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i class="fab fa-evernote fa-fw"></i></a><a href=javascript:void(0); title="Share on Skype" data-sharer=skype data-url=http://403unauthorized.github.io/hugo/en/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i class="fab fa-skype fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/hugo/en/tags/cloud-native/>Cloud Native</a>,&nbsp;<a href=/hugo/en/tags/kubernetes/>Kubernetes</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/hugo/en/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/hugo/en/2021/10/golang-fundamentals/ class=prev rel=prev title="Golang Fundamentals"><i class="fas fa-angle-left fa-fw"></i>Golang Fundamentals</a></div>
+</div>
+<div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="fa fa-theater-masks"></i> </div><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/hugo/en/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/hugo/lib/katex/katex.min.4710034e669c7ff17f823f9ba12cf8a36582d65b007f79cbc4a3c11d7db2e4ca.css integrity="sha256-RxADTmacf/F/gj+boSz4o2WC1lsAf3nLxKPBHX2y5Mo="><link rel=stylesheet href=/hugo/lib/katex/copy-tex.min.bf9ff4137fec38f6255419e142d0883c9c52090885d746f80eee12b273d9b3e0.css integrity="sha256-v5/0E3/sOPYlVBnhQtCIPJxSCQiF10b4Du4SsnPZs+A="><script type=text/javascript src=https://torres-blog.disqus.com/embed.js defer></script><script type=text/javascript src=/hugo/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/hugo/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/hugo/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/hugo/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/hugo/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript src=/hugo/lib/sharer/sharer.min.9c88f86c7f0820287113f6236200459832693656e80d7556cc80a93dfbd45813.js integrity="sha256-nIj4bH8IIChxE/YjYgBFmDJpNlboDXVWzICpPfvUWBM="></script><script type=text/javascript src=/hugo/lib/typeit/typeit.min.491c13689db70b6adb3176a9a792644be7578a2f931521f5cb199d313a21c359.js integrity="sha256-SRwTaJ23C2rbMXapp5JkS+dXii+TFSH1yxmdMTohw1k="></script><script type=text/javascript src=/hugo/lib/katex/katex.min.17f5dd6b9f123dd7140abfb18521b3f4c036cd004f6f40121182a8865f140877.js integrity="sha256-F/Xda58SPdcUCr+xhSGz9MA2zQBPb0ASEYKohl8UCHc="></script><script type=text/javascript src=/hugo/lib/katex/auto-render.min.f74776a677f0d2be0af0264058f928e2ba455d0b19bc985304660d922a43a6b2.js integrity="sha256-90d2pnfw0r4K8CZAWPko4rpFXQsZvJhTBGYNkipDprI="></script><script type=text/javascript src=/hugo/lib/katex/copy-tex.min.2ab2237329021bc443986c8327f6e61357fb68a54e5d233d224023718c02207d.js integrity="sha256-KrIjcykCG8RDmGyDJ/bmE1f7aKVOXSM9IkAjcYwCIH0="></script><script type=text/javascript src=/hugo/lib/katex/mhchem.min.5cea356d6025c5a2f18c454c83ec5674dbb04fab1cd1d75569e77788c6b6f888.js integrity="sha256-XOo1bWAlxaLxjEVMg+xWdNuwT6sc0ddVaed3iMa2+Ig="></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:10},comment:{},data:{"id-1":"Torres","id-2":"Torres"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/hugo/en/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:50,type:"lunr"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/hugo/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>
