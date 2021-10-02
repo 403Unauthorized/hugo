@@ -10,7 +10,7 @@ share:
   enable: true
 comment:
   enable: true
-featuredImagePreview: ""
-featuredImage: ""
+featuredImagePreview: "/hugo/..."
+featuredImage: "/hugo/..."
 ---
 
