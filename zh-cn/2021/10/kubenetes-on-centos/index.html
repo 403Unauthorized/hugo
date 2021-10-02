@@ -1,0 +1,576 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Kubenetes on Centos - Torres' 技术博客</title><meta name=Description content="记录我的学习之路"><meta property="og:title" content="Kubenetes on Centos">
+<meta property="og:description" content="前提条件 一个 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版提供了通用的说明。 每个机器至少 2GB 的内存。 至少 2 个 CPU 集群中所有机器之间的网">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/"><meta property="og:image" content="http://403unauthorized.github.io/logo.ico"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-02T15:21:31+09:00">
+<meta property="article:modified_time" content="2021-10-02T21:42:26+09:00"><meta property="og:site_name" content="Torres' 技术博客">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://403unauthorized.github.io/logo.ico">
+<meta name=twitter:title content="Kubenetes on Centos">
+<meta name=twitter:description content="前提条件 一个 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版提供了通用的说明。 每个机器至少 2GB 的内存。 至少 2 个 CPU 集群中所有机器之间的网">
+<meta name=application-name content="Torres' Blog">
+<meta name=apple-mobile-web-app-title content="Torres' Blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/><link rel=prev href=http://403unauthorized.github.io/hugo/zh-cn/2021/10/golang-fundamentals/><link rel=stylesheet href=/hugo/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/hugo/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/hugo/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/hugo/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubenetes on Centos","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/hugo\/zh-cn\/2021\/10\/kubenetes-on-centos\/"},"genre":"posts","keywords":"Cloud Native, Kubernetes","wordcount":1476,"url":"http:\/\/403unauthorized.github.io\/hugo\/zh-cn\/2021\/10\/kubenetes-on-centos\/","datePublished":"2021-10-02T15:21:31+09:00","dateModified":"2021-10-02T21:42:26+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/hugo/zh-cn/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/hugo/zh-cn/hugo/posts/> 文章 </a><a class=menu-item href=/hugo/zh-cn/hugo/tags/> 标签 </a><a class=menu-item href=/hugo/zh-cn/hugo/categories/> 分类 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/hugo/2021/10/kubenetes-on-centos/>English</option><option value=/hugo/zh-cn/2021/10/kubenetes-on-centos/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/hugo/zh-cn/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/hugo/zh-cn/hugo/posts/ title>文章</a><a class=menu-item href=/hugo/zh-cn/hugo/tags/ title>标签</a><a class=menu-item href=/hugo/zh-cn/hugo/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/hugo/2021/10/kubenetes-on-centos/>English</option><option value=/hugo/zh-cn/2021/10/kubenetes-on-centos/ selected>简体中文</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Kubenetes on Centos</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/hugo/zh-cn/ title=Author rel=" author" class=author><i class="fas fa-user-circle fa-fw"></i>Torres</a></span>&nbsp;<span class=post-category>收录于 <a href=/hugo/zh-cn/categories/kubernetes/><i class="far fa-folder fa-fw"></i>Kubernetes</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-10-02>2021-10-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1476 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/hugo/svg/loading.min.svg data-src=/hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png data-srcset="/hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png, /hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png 1.5x, /hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png 2x" data-sizes=auto alt=/hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png title=/hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#前提条件>前提条件</a>
+<ul>
+<li><a href=#让-iptables-能发现桥接网络的流量>让 iptables 能发现桥接网络的流量</a></li>
+<li><a href=#检查需要的端口>检查需要的端口</a></li>
+<li><a href=#安装-docker>安装 Docker</a></li>
+</ul>
+</li>
+<li><a href=#安装-kubernetes>安装 Kubernetes</a>
+<ul>
+<li><a href=#准备-kubernetes-服务器>准备 Kubernetes 服务器</a></li>
+<li><a href=#安装-kubelet-和-kubeadm>安装 kubelet 和 kubeadm</a></li>
+<li><a href=#禁用-selinux-和-swap>禁用 SELinux 和 Swap</a></li>
+</ul>
+</li>
+<li><a href=#配置防火墙>配置防火墙</a></li>
+<li><a href=#验证安装是否成功>验证安装是否成功</a>
+<ul>
+<li><a href=#初始化-kubernetes-control-plane-k8s-控制平面>初始化 Kubernetes Control Plane (K8s 控制平面)</a></li>
+<li><a href=#验证>验证</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div><div class=content id=content><h2 id=前提条件>前提条件</h2>
+<ul>
+<li>一个 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版提供了通用的说明。</li>
+<li>每个机器至少 2GB 的内存。</li>
+<li>至少 2 个 CPU</li>
+<li>集群中所有机器之间的网络连接，公网或内网都可以。</li>
+<li>每个节点由唯一的主机名，MAC 地址。</li>
+<li>指定的端口在机器上是开放的。点击<a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports target=_blank rel="noopener noreffer">这里</a>查看具体信息。</li>
+<li>禁用 Swap。为了使 kubectl 正常工作，必须禁用 swap。</li>
+</ul>
+<h3 id=让-iptables-能发现桥接网络的流量>让 iptables 能发现桥接网络的流量</h3>
+<p>确保 <code>br_netfilter</code> 模块被装载了。可以通过以下命令来完成：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>lsmod <span class=p>|</span> grep br_netfilter
+<span class=c1># br_netfilter           22256  0 </span>
+<span class=c1># bridge                151336  2 br_netfilter,ebtable_broute</span>
+sudo modprobe br_netfilter
+</code></pre></td></tr></table>
+</div>
+</div><p>为了让 Linux 节点的 iptables 能正确的观测到桥接流量，需要保证 <code>net.bridge.bridge-nf-call-iptables</code> 被设置为1：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo tee /etc/sysctl.d/kubernetes.conf<span class=s>&lt;&lt;EOF
+</span><span class=s>net.bridge.bridge-nf-call-ip6tables = 1
+</span><span class=s>net.bridge.bridge-nf-call-iptables = 1
+</span><span class=s>net.ipv4.ip_forward = 1
+</span><span class=s>EOF</span>
+
+sudo sysctl --system
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=检查需要的端口>检查需要的端口</h3>
+<h3 id=安装-docker>安装 Docker</h3>
+<p>参考：<a href=https://docs.docker.com/engine/install/centos/ target=_blank rel="noopener noreffer">Install Docker Engine on CentOS</a></p>
+<h2 id=安装-kubernetes>安装 Kubernetes</h2>
+<h3 id=准备-kubernetes-服务器>准备 Kubernetes 服务器</h3>
+<table>
+<thead>
+<tr>
+<th style=text-align:left><strong>服务器类型</strong></th>
+<th style=text-align:left><strong>主机名</strong></th>
+<th style=text-align:left><strong>具体信息</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:left>Master</td>
+<td style=text-align:left>192.168.2.60</td>
+<td style=text-align:left>2 CPUs, 2GB Ram</td>
+</tr>
+<tr>
+<td style=text-align:left>Worker</td>
+<td style=text-align:left>192.168.2.61</td>
+<td style=text-align:left>2 CPUs, 2GB Ram</td>
+</tr>
+<tr>
+<td style=text-align:left>Worker</td>
+<td style=text-align:left>192.168.2.62</td>
+<td style=text-align:left>2 CPUs, 2GB Ram</td>
+</tr>
+</tbody>
+</table>
+<h3 id=安装-kubelet-和-kubeadm>安装 kubelet 和 kubeadm</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+</span><span class=s>[kubernetes]
+</span><span class=s>name=Kubernetes
+</span><span class=s>baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+</span><span class=s>enabled=1
+</span><span class=s>gpgcheck=1
+</span><span class=s>repo_gpgcheck=1
+</span><span class=s>gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+</span><span class=s>exclude=kubelet kubeadm kubectl
+</span><span class=s>EOF</span>
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes<span class=o>=</span>kubernetes
+
+sudo systemctl <span class=nb>enable</span> --now kubelet
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=禁用-selinux-和-swap>禁用 SELinux 和 Swap</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># Set SELinux in permissive mode (effectively disabling it)</span>
+sudo setenforce <span class=m>0</span>
+sudo sed -i <span class=s1>&#39;s/^SELINUX=enforcing$/SELINUX=permissive/&#39;</span> /etc/selinux/config
+
+<span class=c1># Disable swap</span>
+sudo sed -i <span class=s1>&#39;/ swap / s/^\(.*\)$/#\1/g&#39;</span> /etc/fstab
+sudo swapoff -a
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=配置防火墙>配置防火墙</h2>
+<p><strong>启用 Master 节点端口</strong>:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo firewall-cmd --add-port<span class=o>={</span>6443,2379-2380,10250,10251,10252,5473,179,5473<span class=o>}</span>/tcp --permanent
+sudo firewall-cmd --add-port<span class=o>={</span>4789,8285,8472<span class=o>}</span>/udp --permanent
+sudo firewall-cmd --reload
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>启用 Worker 节点端口</strong>:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo firewall-cmd --add-port<span class=o>={</span>10250,30000-32767,5473,179,5473<span class=o>}</span>/tcp --permanent
+sudo firewall-cmd --add-port<span class=o>={</span>4789,8285,8472<span class=o>}</span>/udp --permanent
+sudo firewall-cmd --reload
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=验证安装是否成功>验证安装是否成功</h2>
+<p>为了验证安装是否成功，我们准备用 <strong>kubeadm</strong> 创建一个 cluster。</p>
+<h3 id=初始化-kubernetes-control-plane-k8s-控制平面>初始化 Kubernetes Control Plane (K8s 控制平面)</h3>
+<p>首先，向 <code>/etc/hosts</code> 中添加下面的主机名：</p>
+<blockquote>
+<p>192.168.2.60 k8s-master01 k8s-master01.torres.com</p>
+</blockquote>
+<p>然后运行以下命令来初始化 master 节点的 control plane：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># (Optional) You can run this commands to verify the connection with gcr.io</span>
+sudo kubeadm config images pull
+
+<span class=c1># Init Control plane</span>
+sudo kubeadm init --control-plane-endpoint<span class=o>=</span>k8s-master01.torres.com --node-name<span class=o>=</span>k8s-master01 --upload-certs 
+</code></pre></td></tr></table>
+</div>
+</div><p>然后可以看到以下的日志：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>init<span class=o>]</span> Using Kubernetes version: v1.21.1
+<span class=o>[</span>preflight<span class=o>]</span> Running pre-flight checks
+	<span class=o>[</span>WARNING Firewalld<span class=o>]</span>: firewalld is active, please ensure ports <span class=o>[</span><span class=m>6443</span> 10250<span class=o>]</span> are open or your cluster may not <span class=k>function</span> correctly
+	<span class=o>[</span>WARNING IsDockerSystemdCheck<span class=o>]</span>: detected <span class=s2>&#34;cgroupfs&#34;</span> as the Docker cgroup driver. The recommended driver is <span class=s2>&#34;systemd&#34;</span>. Please follow the guide at https://kubernetes.io/docs/setup/cri/
+<span class=o>[</span>preflight<span class=o>]</span> Pulling images required <span class=k>for</span> setting up a Kubernetes cluster
+<span class=o>[</span>preflight<span class=o>]</span> This might take a minute or two, depending on the speed of your internet connection
+<span class=o>[</span>preflight<span class=o>]</span> You can also perform this action in beforehand using <span class=s1>&#39;kubeadm config images pull&#39;</span>
+<span class=o>[</span>certs<span class=o>]</span> Using certificateDir folder <span class=s2>&#34;/etc/kubernetes/pki&#34;</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;ca&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;apiserver&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> apiserver serving cert is signed <span class=k>for</span> DNS names <span class=o>[</span>k8s-master01 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local localhost.localdomain<span class=o>]</span> and IPs <span class=o>[</span>10.96.0.1 192.168.2.60<span class=o>]</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;apiserver-kubelet-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;front-proxy-ca&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;front-proxy-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/ca&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/server&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> etcd/server serving cert is signed <span class=k>for</span> DNS names <span class=o>[</span>localhost localhost.localdomain<span class=o>]</span> and IPs <span class=o>[</span>192.168.2.60 127.0.0.1 ::1<span class=o>]</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/peer&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> etcd/peer serving cert is signed <span class=k>for</span> DNS names <span class=o>[</span>localhost localhost.localdomain<span class=o>]</span> and IPs <span class=o>[</span>192.168.2.60 127.0.0.1 ::1<span class=o>]</span>
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;etcd/healthcheck-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;apiserver-etcd-client&#34;</span> certificate and key
+<span class=o>[</span>certs<span class=o>]</span> Generating <span class=s2>&#34;sa&#34;</span> key and public key
+<span class=o>[</span>kubeconfig<span class=o>]</span> Using kubeconfig folder <span class=s2>&#34;/etc/kubernetes&#34;</span>
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;admin.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;kubelet.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;controller-manager.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubeconfig<span class=o>]</span> Writing <span class=s2>&#34;scheduler.conf&#34;</span> kubeconfig file
+<span class=o>[</span>kubelet-start<span class=o>]</span> Writing kubelet environment file with flags to file <span class=s2>&#34;/var/lib/kubelet/kubeadm-flags.env&#34;</span>
+<span class=o>[</span>kubelet-start<span class=o>]</span> Writing kubelet configuration to file <span class=s2>&#34;/var/lib/kubelet/config.yaml&#34;</span>
+<span class=o>[</span>kubelet-start<span class=o>]</span> Starting the kubelet
+<span class=o>[</span>control-plane<span class=o>]</span> Using manifest folder <span class=s2>&#34;/etc/kubernetes/manifests&#34;</span>
+<span class=o>[</span>control-plane<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=s2>&#34;kube-apiserver&#34;</span>
+<span class=o>[</span>control-plane<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=s2>&#34;kube-controller-manager&#34;</span>
+<span class=o>[</span>control-plane<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=s2>&#34;kube-scheduler&#34;</span>
+<span class=o>[</span>etcd<span class=o>]</span> Creating static Pod manifest <span class=k>for</span> <span class=nb>local</span> etcd in <span class=s2>&#34;/etc/kubernetes/manifests&#34;</span>
+<span class=o>[</span>wait-control-plane<span class=o>]</span> Waiting <span class=k>for</span> the kubelet to boot up the control plane as static Pods from directory <span class=s2>&#34;/etc/kubernetes/manifests&#34;</span>. This can take up to 4m0s
+<span class=o>[</span>apiclient<span class=o>]</span> All control plane components are healthy after 13.004835 seconds
+<span class=o>[</span>upload-config<span class=o>]</span> Storing the configuration used in ConfigMap <span class=s2>&#34;kubeadm-config&#34;</span> in the <span class=s2>&#34;kube-system&#34;</span> Namespace
+<span class=o>[</span>kubelet<span class=o>]</span> Creating a ConfigMap <span class=s2>&#34;kubelet-config-1.21&#34;</span> in namespace kube-system with the configuration <span class=k>for</span> the kubelets in the cluster
+<span class=o>[</span>upload-certs<span class=o>]</span> Storing the certificates in Secret <span class=s2>&#34;kubeadm-certs&#34;</span> in the <span class=s2>&#34;kube-system&#34;</span> Namespace
+<span class=o>[</span>upload-certs<span class=o>]</span> Using certificate key:
+b8cb86fb2bd01029d07cd1c67a6ae9ca358655595cef1cc7bec5253b64a81037
+<span class=o>[</span>mark-control-plane<span class=o>]</span> Marking the node localhost.localdomain as control-plane by adding the labels: <span class=o>[</span>node-role.kubernetes.io/master<span class=o>(</span>deprecated<span class=o>)</span> node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers<span class=o>]</span>
+<span class=o>[</span>mark-control-plane<span class=o>]</span> Marking the node localhost.localdomain as control-plane by adding the taints <span class=o>[</span>node-role.kubernetes.io/master:NoSchedule<span class=o>]</span>
+<span class=o>[</span>bootstrap-token<span class=o>]</span> Using token: tm2wqn.66pko8ldffracpfs
+<span class=o>[</span>bootstrap-token<span class=o>]</span> Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow Node Bootstrap tokens to get nodes
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order <span class=k>for</span> nodes to get long term certificate credentials
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+<span class=o>[</span>bootstrap-token<span class=o>]</span> configured RBAC rules to allow certificate rotation <span class=k>for</span> all node client certificates in the cluster
+<span class=o>[</span>bootstrap-token<span class=o>]</span> Creating the <span class=s2>&#34;cluster-info&#34;</span> ConfigMap in the <span class=s2>&#34;kube-public&#34;</span> namespace
+<span class=o>[</span>kubelet-finalize<span class=o>]</span> Updating <span class=s2>&#34;/etc/kubernetes/kubelet.conf&#34;</span> to point to a rotatable kubelet client certificate and key
+<span class=o>[</span>addons<span class=o>]</span> Applied essential addon: CoreDNS
+<span class=o>[</span>addons<span class=o>]</span> Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p <span class=nv>$HOME</span>/.kube
+  sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
+  sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
+
+Alternatively, <span class=k>if</span> you are the root user, you can run:
+
+  <span class=nb>export</span> <span class=nv>KUBECONFIG</span><span class=o>=</span>/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run <span class=s2>&#34;kubectl apply -f [podnetwork].yaml&#34;</span> with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of the control-plane node running the following <span class=nb>command</span> on each as root:
+
+  kubeadm join k8s-master01:6443 --token tm2wqn.66pko8ldffracpfs <span class=se>\
+</span><span class=se></span>	--discovery-token-ca-cert-hash sha256:470585a5c3c4706d86d06b23f1960a953960db666798266e528e6faf69981d2e <span class=se>\
+</span><span class=se></span>	--control-plane --certificate-key b8cb86fb2bd01029d07cd1c67a6ae9ca358655595cef1cc7bec5253b64a81037
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours<span class=p>;</span> If necessary, you can use
+<span class=s2>&#34;kubeadm init phase upload-certs --upload-certs&#34;</span> to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join k8s-master01:6443 --token tm2wqn.66pko8ldffracpfs <span class=se>\
+</span><span class=se></span>	--discovery-token-ca-cert-hash sha256:470585a5c3c4706d86d06b23f1960a953960db666798266e528e6faf69981d2e
+</code></pre></td></tr></table>
+</div>
+</div><p>我们需要执行日志上的命令来启用cluster：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>mkdir -p <span class=nv>$HOME</span>/.kube
+sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
+sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=验证>验证</h3>
+<p>运行以下指令来验证集群是否初始化成功：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl cluster-info
+
+Kubernetes control plane is running at https://k8s-master01:6443
+CoreDNS is running at https://k8s-master01:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use <span class=s1>&#39;kubectl cluster-info dump&#39;</span>.
+</code></pre></td></tr></table>
+</div>
+</div><p>如果你还想看有哪些节点：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl get nodes
+
+NAME                    STATUS     ROLES                  AGE     VERSION
+localhost.localdomain   NotReady   control-plane,master   3m15s   v1.21.1
+</code></pre></td></tr></table>
+</div>
+</div></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2021-10-02&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/6000829a29fd434178dd04c3ed58293c4562b1e5 target=_blank title="commit by Yongqi Lei(leiyongqi1026@gmail.com) 6000829a29fd434178dd04c3ed58293c4562b1e5: Update path of images">
+<i class="fas fa-hashtag fa-fw"></i>6000829</a></span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="分享到 Linkedin" data-sharer=linkedin data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/><i class="fab fa-reddit fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i data-svg-src=/hugo/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos" data-image=/hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 人人" data-sharer=renren data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/><i class="fab fa-renren fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i data-svg-src=/hugo/lib/simple-icons/icons/baidu.min.svg></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i class="fab fa-evernote fa-fw"></i></a><a href=javascript:void(0); title="分享到 Skype" data-sharer=skype data-url=http://403unauthorized.github.io/hugo/zh-cn/2021/10/kubenetes-on-centos/ data-title="Kubenetes on Centos"><i class="fab fa-skype fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/hugo/zh-cn/tags/cloud-native/>Cloud Native</a>,&nbsp;<a href=/hugo/zh-cn/tags/kubernetes/>Kubernetes</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/hugo/zh-cn/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/hugo/zh-cn/2021/10/golang-fundamentals/ class=prev rel=prev title="Golang 基础知识"><i class="fas fa-angle-left fa-fw"></i>Golang 基础知识</a></div>
+</div>
+<div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="fa fa-theater-masks"></i> </div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/hugo/zh-cn/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/hugo/lib/katex/katex.min.4710034e669c7ff17f823f9ba12cf8a36582d65b007f79cbc4a3c11d7db2e4ca.css integrity="sha256-RxADTmacf/F/gj+boSz4o2WC1lsAf3nLxKPBHX2y5Mo="><link rel=stylesheet href=/hugo/lib/katex/copy-tex.min.bf9ff4137fec38f6255419e142d0883c9c52090885d746f80eee12b273d9b3e0.css integrity="sha256-v5/0E3/sOPYlVBnhQtCIPJxSCQiF10b4Du4SsnPZs+A="><script type=text/javascript src=https://torres-blog.disqus.com/embed.js defer></script><script type=text/javascript src=/hugo/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/hugo/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/hugo/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/hugo/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/hugo/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/hugo/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/hugo/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript src=/hugo/lib/sharer/sharer.min.9c88f86c7f0820287113f6236200459832693656e80d7556cc80a93dfbd45813.js integrity="sha256-nIj4bH8IIChxE/YjYgBFmDJpNlboDXVWzICpPfvUWBM="></script><script type=text/javascript src=/hugo/lib/typeit/typeit.min.491c13689db70b6adb3176a9a792644be7578a2f931521f5cb199d313a21c359.js integrity="sha256-SRwTaJ23C2rbMXapp5JkS+dXii+TFSH1yxmdMTohw1k="></script><script type=text/javascript src=/hugo/lib/katex/katex.min.17f5dd6b9f123dd7140abfb18521b3f4c036cd004f6f40121182a8865f140877.js integrity="sha256-F/Xda58SPdcUCr+xhSGz9MA2zQBPb0ASEYKohl8UCHc="></script><script type=text/javascript src=/hugo/lib/katex/auto-render.min.f74776a677f0d2be0af0264058f928e2ba455d0b19bc985304660d922a43a6b2.js integrity="sha256-90d2pnfw0r4K8CZAWPko4rpFXQsZvJhTBGYNkipDprI="></script><script type=text/javascript src=/hugo/lib/katex/copy-tex.min.2ab2237329021bc443986c8327f6e61357fb68a54e5d233d224023718c02207d.js integrity="sha256-KrIjcykCG8RDmGyDJ/bmE1f7aKVOXSM9IkAjcYwCIH0="></script><script type=text/javascript src=/hugo/lib/katex/mhchem.min.5cea356d6025c5a2f18c454c83ec5674dbb04fab1cd1d75569e77788c6b6f888.js integrity="sha256-XOo1bWAlxaLxjEVMg+xWdNuwT6sc0ddVaed3iMa2+Ig="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:10},comment:{},data:{"id-1":"Torres","id-2":"Torres"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/hugo/zh-cn/index.json",lunrLanguageCode:"zh",lunrSegmentitURL:"/hugo/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"lunr"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/hugo/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>
