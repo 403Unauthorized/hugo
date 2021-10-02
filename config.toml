@@ -193,7 +193,7 @@ enableGitInfo = true
       # 主页显示头像的 URL
       avatarURL = "/hugo/images/avatar.png"
       # LoveIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
-      title = "Hello Cloud Native"
+      title = "Hello, Cloud Native"
       # 主页显示的网站副标题
       subtitle = "专注Java、Golang等云原生的开发与学习"
       # 是否为副标题显示打字机动画
@@ -337,34 +337,34 @@ enableGitInfo = true
     # 打字结束之后光标的持续时间 (单位是毫秒, "-1" 代表无限大)
     duration = -1
 
-[menu]
-  [[menu.main]]
-    identifier = "posts"
-    # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
-    pre = ""
-    # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
-    post = ""
-    name = "文章"
-    url = "/posts/"
-    # 当你将鼠标悬停在此菜单链接上时, 将显示的标题
-    title = ""
-    weight = 1
-  [[menu.main]]
-    identifier = "tags"
-    pre = ""
-    post = ""
-    name = "标签"
-    url = "/tags/"
-    title = ""
-    weight = 2
-  [[menu.main]]
-    identifier = "categories"
-    pre = ""
-    post = ""
-    name = "分类"
-    url = "/categories/"
-    title = ""
-    weight = 3
+# [menu]
+#   [[menu.main]]
+#     identifier = "posts"
+#     # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
+#     pre = ""
+#     # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
+#     post = ""
+#     name = "文章"
+#     url = "/posts/"
+#     # 当你将鼠标悬停在此菜单链接上时, 将显示的标题
+#     title = ""
+#     weight = 1
+#   [[menu.main]]
+#     identifier = "tags"
+#     pre = ""
+#     post = ""
+#     name = "标签"
+#     url = "/tags/"
+#     title = ""
+#     weight = 2
+#   [[menu.main]]
+#     identifier = "categories"
+#     pre = ""
+#     post = ""
+#     name = "分类"
+#     url = "/categories/"
+#     title = ""
+#     weight = 3
 
 # Hugo 解析文档的配置
 [markup]
@@ -392,8 +392,8 @@ enableGitInfo = true
       unsafe = true
   # 目录设置
   [markup.tableOfContents]
-    startLevel = 2
-    endLevel = 6
+    startLevel = 1
+    endLevel = 99
 
 # 作者配置
 [author]
