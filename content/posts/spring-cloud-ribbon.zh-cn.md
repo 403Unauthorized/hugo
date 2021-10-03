@@ -53,7 +53,7 @@ spring-cloud-commons 包中定义了 **LoadBalancerClient** 接口，它是 Ribb
 
 
 
-![LoadBalancerClient 继承结构](/images/posts/spring-cloud-ribbon.png/ribbon1.png)
+![LoadBalancerClient 继承结构](/images/posts/spring-cloud-ribbon/ribbon1.png)
 
 ### LoadBalancerAutoConfiguration
 
@@ -61,7 +61,7 @@ spring-cloud-commons 包中定义了 **LoadBalancerClient** 接口，它是 Ribb
 
 
 
-![LoadBalancerAutoConfiguration](/images/posts/spring-cloud-ribbon.png/ribbon2.png)
+![LoadBalancerAutoConfiguration](/images/posts/spring-cloud-ribbon/ribbon2.png)
 
 **LoadBalancerAutoConfiguration**
 
@@ -348,7 +348,7 @@ public interface ILoadBalancer {
 
 跟踪源码后，我们可以找到 ILoadBalancer 的继承结构如下，DynamicServerListLoadBalancer 继承了 ILoadBalancer，也就是说我们可以通过跟踪这个类来搞清楚 Ribbon 是如何实现负载均衡的。
 
-![ILoadBalancer 继承结构](/images/posts/spring-cloud-ribbon.png/ribbon3.png)
+![ILoadBalancer 继承结构](/images/posts/spring-cloud-ribbon/ribbon3.png)
 
 ### 成员介绍
 
@@ -367,7 +367,7 @@ IRule 有很多默认的实现类，都通过不同的算法来处理负载均�
 
 
 
-![IRule 实现类](/images/posts/spring-cloud-ribbon.png/ribbon4.png)
+![IRule 实现类](/images/posts/spring-cloud-ribbon/ribbon4.png)
 
 **IRule 实现类**
 
@@ -390,7 +390,7 @@ public boolean isAlive(Server Server);
 
 
 
-![IPing 实现类](/images/posts/spring-cloud-ribbon.png/ribbon5.png)
+![IPing 实现类](/images/posts/spring-cloud-ribbon/ribbon5.png)
 
 **IPing 实现类**
 
