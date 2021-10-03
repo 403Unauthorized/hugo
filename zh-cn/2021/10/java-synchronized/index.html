@@ -1,0 +1,369 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Synchronized 关键字 - Torres' 技术博客</title><meta name=Description content="记录我的学习之路"><meta property="og:title" content="Synchronized 关键字">
+<meta property="og:description" content="我们在学习 Java 并发编程的时候，看到的最多的就是 synchronized 关键字了，它可以解决很多线程安全问题，随着深入学习，我们知道 synchronized 是一个重量级锁，效率相对于 Lock 来说">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/"><meta property="og:image" content="http://403unauthorized.github.io/logo.ico"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-02T23:55:46+09:00">
+<meta property="article:modified_time" content="2021-10-03T10:25:48+09:00"><meta property="og:site_name" content="Torres' 技术博客">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://403unauthorized.github.io/logo.ico">
+<meta name=twitter:title content="Synchronized 关键字">
+<meta name=twitter:description content="我们在学习 Java 并发编程的时候，看到的最多的就是 synchronized 关键字了，它可以解决很多线程安全问题，随着深入学习，我们知道 synchronized 是一个重量级锁，效率相对于 Lock 来说">
+<meta name=application-name content="Torres' Blog">
+<meta name=apple-mobile-web-app-title content="Torres' Blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/><link rel=prev href=http://403unauthorized.github.io/zh-cn/2021/10/java-volatile/><link rel=next href=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/><link rel=stylesheet href=/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Synchronized 关键字","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/java-synchronized\/"},"genre":"posts","keywords":"Java, Concurrency","wordcount":2970,"url":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/java-synchronized\/","datePublished":"2021-10-02T23:55:46+09:00","dateModified":"2021-10-03T10:25:48+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/zh-cn/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/zh-cn/posts/> 文章 </a><a class=menu-item href=/zh-cn/tags/> 标签 </a><a class=menu-item href=/zh-cn/categories/> 分类 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/zh-cn/2021/10/java-synchronized/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/zh-cn/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/zh-cn/posts/ title>文章</a><a class=menu-item href=/zh-cn/tags/ title>标签</a><a class=menu-item href=/zh-cn/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/zh-cn/2021/10/java-synchronized/ selected>简体中文</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Synchronized 关键字</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/zh-cn/ title=Author rel=" author" class=author><i class="fas fa-user-circle fa-fw"></i>Torres</a></span>&nbsp;<span class=post-category>收录于 <a href=/zh-cn/categories/programming/><i class="far fa-folder fa-fw"></i>Programming</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-10-02>2021-10-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2970 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#实现原理>实现原理</a></li>
+<li><a href=#java-对象头和-monitor>Java 对象头和 Monitor</a>
+<ul>
+<li><a href=#java-对象头>Java 对象头</a></li>
+</ul>
+</li>
+<li><a href=#monitor>Monitor</a></li>
+<li><a href=#java-中锁的优化>Java 中锁的优化</a>
+<ul>
+<li><a href=#自旋锁>自旋锁</a></li>
+<li><a href=#适应性自旋锁>适应性自旋锁</a></li>
+<li><a href=#锁消除>锁消除</a></li>
+<li><a href=#锁粗化>锁粗化</a></li>
+<li><a href=#偏向锁>偏向锁</a></li>
+<li><a href=#轻量级锁>轻量级锁</a></li>
+<li><a href=#重量级锁>重量级锁</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>我们在学习 Java 并发编程的时候，看到的最多的就是 synchronized 关键字了，它可以解决很多线程安全问题，随着深入学习，我们知道 synchronized 是一个重量级锁，效率相对于 Lock 来说并不是那么好。但是经过 Java 几个版本的优化之后，synchronized 并不显得那么笨重了。下面我们来看一下 synchronized 的实现机制，和 Java 对它进行了什么样的升级。</p>
+<h2 id=实现原理>实现原理</h2>
+<p>Synchronized 保证了方法或者代码块在运行时，同一时间只有一个线程可以执行，并保证了对共享变量的内存可见性。</p>
+<p>Java 中 synchronized 集中实现方法：</p>
+<ul>
+<li>非静态同步方法：锁住当前实例对象</li>
+</ul>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>synchronized</span> <span class=kt>void</span> <span class=nf>test</span><span class=o>()</span> <span class=o>{</span>
+
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>静态同步方法：锁住当前类的 class 对象</li>
+</ul>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>static</span> <span class=kd>synchronized</span> <span class=kt>void</span> <span class=nf>test</span><span class=o>()</span> <span class=o>{</span>
+
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>同步代码块：锁住括号中的对象</li>
+</ul>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kt>void</span> <span class=nf>test</span><span class=o>()</span> <span class=o>{</span>
+        <span class=kd>synchronized</span> <span class=o>(</span><span class=k>this</span><span class=o>)</span> <span class=o>{</span>
+
+        <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们利用工具查看生成的 class 文件，生成的 class 文件如下：</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/java-synchronized/java_syn_1.png data-srcset="/images/posts/java-synchronized/java_syn_1.png, /images/posts/java-synchronized/java_syn_1.png 1.5x, /images/posts/java-synchronized/java_syn_1.png 2x" data-sizes=auto alt=/images/posts/java-synchronized/java_syn_1.png title="Synchronized class 文件"></p>
+<p>从以上 class 文件我们可以看出，同步代码块是通过 <strong>monitorenter</strong> 和 <strong>monitorexit</strong> 来实现的，同步方法是依靠方法修饰符中的 <strong>ACC_SYNCHRONIZED</strong> 实现。</p>
+<ul>
+<li>同步代码块：moniterenter 指令会插入到同步代码块开始的位置，moniterexit 插入到同步代码块结束的位置，JVM 需要保证每个 monitorenter 都有一个 monitorexit 相对应。任何对象都有一个 monitor 与之相关联，当 monitor 被持有后，它将处于锁定状态。线程执行到 moniterenter 指令时，将会尝试获取当前对象对应的 monitor 所有权（这个过程就是获取锁）。</li>
+<li>同步方法：同步方法中没有 monitorenter 和 monitorexit，取而代之的是在 flags 中添加了 ACC_SYNCHRONIZED 标识，JVM 通过该 ACC_SYNCHRONIZED 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用（方法调用时，调用指令将会检查方法是否含有 ACC_SYNCHRONIZED 访问标志，如果有，调用线程将会先持有 monitor。如果同步方法执行期间抛出了异常，而且在方法内部无法处理异常，则这个方法所持有的 monitor 将会在异常抛到同步方法之外时自动释放）。使用调用该方法的对象或方法所属 Class 在 JVM 的内部对象表示 Klass 做为锁对象。</li>
+</ul>
+<p>关于 monitorenter 和 moniterexit 这两条指令 在 JVM 的规范中有这样一句话：</p>
+<blockquote>
+<p>Each object is associated with a monitor. A monitor is locked if and only if it has an owner. The thread that executes monitorenter attempts to gain ownership of the monitor associated with objectref, as follows:
+• If the entry count of the monitor associated with objectref is zero, the thread enters the monitor and sets its entry count to one. The thread is then the owner of the monitor.
+• If the thread already owns the monitor associated with objectref, it reenters the monitor, incrementing its entry count.
+• If another thread already owns the monitor associated with objectref, the thread blocks until the monitor’s entry count is zero, then tries again to gain ownership.</p>
+</blockquote>
+<p>以上引用也说明了，每个对象都关联了一个 monitor，如果一个monitor被占用则它处于锁定状态。线程在执行 monitorenter 指令时会尝试获取对象关联的 monitor 的所有权。</p>
+<ul>
+<li>如果 monitor 的进入数为0，则该线程进入 monitor，并将进入数设置为1，该线程为该 monitor 的所有者。</li>
+<li>如果一个线程已经占有了对象关联的 monitor，它会重新进入，并将进入数加1。</li>
+<li>如果已经有另一个线程占有了该 monitor，则该线程会阻塞直到 monitor 的进入数为0，然后尝试获取所有权。</li>
+</ul>
+<blockquote>
+<p>The thread that executes monitorexit must be the owner of the monitor associated with the instance referenced by objectref.
+The thread decrements the entry count of the monitor associated with objectref. If as a result the value of the entry count is zero, the thread exits the monitor and is no longer its owner. Other threads that are blocking to enter the monitor are allowed to attempt to do so.</p>
+</blockquote>
+<p>大致意思是：执行 monitorexit 的线程必须是 objectref 所对应的 monitor 的所有者。该指令执行时，线程会将 monitor 的进入数减1。如果进入数减1之后为0，则该线程退出 monitor 并且不再是它的所有者。被阻塞的其他线程将允许尝试获取所有权。</p>
+<h2 id=java-对象头和-monitor>Java 对象头和 Monitor</h2>
+<h3 id=java-对象头>Java 对象头</h3>
+<p>对象在堆内存中的布局分为三块区域：对象头、实例数据和对其填充。</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/java-synchronized/java_syn_2.png data-srcset="/images/posts/java-synchronized/java_syn_2.png, /images/posts/java-synchronized/java_syn_2.png 1.5x, /images/posts/java-synchronized/java_syn_2.png 2x" data-sizes=auto alt=/images/posts/java-synchronized/java_syn_2.png title=Java对象头></p>
+<ul>
+<li>实例变量：存放类和父类的属性信息，如果是数组，还包括数组的长度，这部分内存为4字节。</li>
+<li>填充数据：JVM 要求对象的其实地址必须为8字节的整数倍，所以有可能数据需要填充（非必须）。</li>
+</ul>
+<p>Java 的对象头是实现 synchronized 的锁对象的基础。一般情况，synchronized 使用的锁对象都存在 Java 对象头中。JVM 采用两个字节来存储对象头（如果对象是数组，则使用三个字节，多出来的字节存储数组长度），主要是由 Mark Word 和类型指针组成。</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:center>虚拟机位数</th>
+<th style=text-align:center>头对象结构</th>
+<th style=text-align:center>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:center>32/64bit</td>
+<td style=text-align:center>Mark Word</td>
+<td style=text-align:center>存储对象的 hashCode，锁信息、分代年龄、GC标志、偏向线程ID、偏向时间戳等信息</td>
+</tr>
+<tr>
+<td style=text-align:center>32/64bit</td>
+<td style=text-align:center>Class Metadata Address</td>
+<td style=text-align:center>类型指针指向对象的类元数据，JVM 通过这个指针确定对象是哪个类的实例</td>
+</tr>
+</tbody>
+</table>
+<p>由于对象头的信息是与对象自身定义的数据没有关系的额外存储成本，因此考虑到 JVM 的空间效率，Mark Word 被设计成一个非固定的数据结构，以存储更多有效的数据，它会根据对象状态的变化复用自己的存储空间。Mark Word 会根据程序的运行而发生变化（以下是32位虚拟机默认的存储结构和其他变化状态）。</p>
+<p>32位 JVM 的 Mark Word 默认存储结构：</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:left>锁状态</th>
+<th style=text-align:left>25bit</th>
+<th style=text-align:left>4bit</th>
+<th style=text-align:left>1bit是否是偏向锁</th>
+<th style=text-align:left>2bit 锁标志位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:left>无锁状态</td>
+<td style=text-align:left>对象HashCode</td>
+<td style=text-align:left>对象分代年龄</td>
+<td style=text-align:left>0</td>
+<td style=text-align:left>01</td>
+</tr>
+</tbody>
+</table>
+<p>状态变化（32位虚拟机）：</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/java-synchronized/java_syn_3.png data-srcset="/images/posts/java-synchronized/java_syn_3.png, /images/posts/java-synchronized/java_syn_3.png 1.5x, /images/posts/java-synchronized/java_syn_3.png 2x" data-sizes=auto alt=/images/posts/java-synchronized/java_syn_3.png title=锁的状态变化></p>
+<p>其中轻量级锁和偏向锁时在 Java 6 对 synchronized 锁进行优化后新增的。</p>
+<h2 id=monitor>Monitor</h2>
+<p>Monitor 可以被理解为监视器，在 Hotspot 中，它是由 ObjectMonitor 实现的（位于 HotSpot 虚拟机源码的 ObjectMonitor.hpp文件中，C++实现），其主要数据结构为：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=n>ObjectMonitor</span><span class=p>()</span> <span class=p>{</span>
+    <span class=n>_header</span>       <span class=o>=</span> <span class=nb>NULL</span><span class=p>;</span>
+    <span class=n>_count</span>        <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=c1>//记录个数
+</span><span class=c1></span>    <span class=n>_waiters</span>      <span class=o>=</span> <span class=mi>0</span><span class=p>,</span>
+    <span class=n>_recursions</span>   <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+    <span class=n>_object</span>       <span class=o>=</span> <span class=nb>NULL</span><span class=p>;</span>
+    <span class=n>_owner</span>        <span class=o>=</span> <span class=nb>NULL</span><span class=p>;</span>
+    <span class=n>_WaitSet</span>      <span class=o>=</span> <span class=nb>NULL</span><span class=p>;</span> <span class=c1>//处于wait状态的线程，会被加入到_WaitSet
+</span><span class=c1></span>    <span class=n>_WaitSetLock</span>  <span class=o>=</span> <span class=mi>0</span> <span class=p>;</span>
+    <span class=n>_Responsible</span>  <span class=o>=</span> <span class=nb>NULL</span> <span class=p>;</span>
+    <span class=n>_succ</span>         <span class=o>=</span> <span class=nb>NULL</span> <span class=p>;</span>
+    <span class=n>_cxq</span>          <span class=o>=</span> <span class=nb>NULL</span> <span class=p>;</span>
+    <span class=n>FreeNext</span>      <span class=o>=</span> <span class=nb>NULL</span> <span class=p>;</span>
+    <span class=n>_EntryList</span>    <span class=o>=</span> <span class=nb>NULL</span> <span class=p>;</span> <span class=c1>//处于等待锁block状态的线程，会被加入到该列表
+</span><span class=c1></span>    <span class=n>_SpinFreq</span>     <span class=o>=</span> <span class=mi>0</span> <span class=p>;</span>
+    <span class=n>_SpinClock</span>    <span class=o>=</span> <span class=mi>0</span> <span class=p>;</span>
+    <span class=n>OwnerIsThread</span> <span class=o>=</span> <span class=mi>0</span> <span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>ObjectMonitor 中有两个队列 —— _WaitSet, _EntryList（当多个线程同时访问一段同步代码时，首先会进入 _EntryList 集合，当线程拥有对象的 monitor 后，ObjectMonitor 会将 _owner 变量设置为当前线程，并将计数器 _count 加1，如果该线程调用了 wait() 方法，它将会释放当前持有的 monitor， _owner 将恢复为 NULL，同时该线程会进入 _WaitSet 等待被唤醒）。它们是用来保存 ObjectWaiter 对象列表（每个等待的线程都会被封装为 ObjectWaiter 对象），底层实现原理不再叙述(C++实现的，我也没看过)。我们可以用一张图来简单概述它的数据结构。</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/java-synchronized/java_syn_4.png data-srcset="/images/posts/java-synchronized/java_syn_4.png, /images/posts/java-synchronized/java_syn_4.png 1.5x, /images/posts/java-synchronized/java_syn_4.png 2x" data-sizes=auto alt=/images/posts/java-synchronized/java_syn_4.png title=Monitor数据结构></p>
+<p>其中：</p>
+<ul>
+<li><strong>Owner</strong>：初始化为 NULL，当线程成功拥有该锁时保存线程唯一标识，锁被释放后又置为 NULL。</li>
+<li><strong>EntryQ</strong>：关联一个系统互斥锁（semaphore），阻塞所有试图锁住monitor record失败的线程。</li>
+<li><strong>RcThis</strong>:表示blocked或waiting在该monitor record上的所有线程的个数。</li>
+<li><strong>Nest</strong>:用来实现重入锁的计数。</li>
+<li><strong>HashCode</strong>:保存从对象头拷贝过来的HashCode值（可能还包含GC age）。</li>
+<li><strong>Candidate</strong>:用来避免不必要的阻塞或等待线程唤醒，因为每一次只有一个线程能够成功拥有锁，如果每次前一个释放锁的线程唤醒所有正在阻塞或等待的线程，会引起不必要的上下文切换（从阻塞到就绪然后因为竞争锁失败又被阻塞）从而导致性能严重下降。Candidate只有两种可能的值0表示没有需要唤醒的线程1表示要唤醒一个继任线程来竞争锁。</li>
+</ul>
+<blockquote>
+<p>摘自：<a href="http://cmsblogs.com/?p=2071" target=_blank rel="noopener noreffer">【死磕Java并发】—–深入分析synchronized的实现原理</a></p>
+</blockquote>
+<h2 id=java-中锁的优化>Java 中锁的优化</h2>
+<p>Jdk 1.6 对锁的实现做了大量的优化（轻量级锁，偏向锁，自旋锁，适应性自旋锁，锁消除，锁粗化），锁主要存在四种状态（依次）：无锁状态，偏向锁状态，轻量级锁状态，重量级锁状态。它们会随着锁竞争的激烈而升级，锁只能升级不能降级（为了提高获得锁和释放锁的效率）。</p>
+<h3 id=自旋锁>自旋锁</h3>
+<h3 id=适应性自旋锁>适应性自旋锁</h3>
+<h3 id=锁消除>锁消除</h3>
+<h3 id=锁粗化>锁粗化</h3>
+<h3 id=偏向锁>偏向锁</h3>
+<h3 id=轻量级锁>轻量级锁</h3>
+<h3 id=重量级锁>重量级锁</h3>
+<p>通过对象内部的监视器 monitor 实现，而 monitor 的本质是依赖于底层操作系统的 Mutex Lock 实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</p>
+<p>参考文章：</p>
+<p><a href=https://blogs.oracle.com/dave/biased-locking-in-hotspot target=_blank rel="noopener noreffer">Biased Locking in HotSpot</a></p>
+<p><a href=https://www.cnblogs.com/javaminer/p/3889023.html target=_blank rel="noopener noreffer">JVM内部细节之一：synchronized关键字及实现细节(轻量级锁Lightweight Locking)</a></p>
+<p><a href="http://cmsblogs.com/?p=2071" target=_blank rel="noopener noreffer">【死磕Java并发】—–深入分析synchronized的实现原理</a></p>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2021-10-03&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/5539ee676150a2b5e8e0ed4a06a0b8a5b5abc58a target=_blank title="commit by Yongqi Lei(leiyongqi1026@gmail.com) 5539ee676150a2b5e8e0ed4a06a0b8a5b5abc58a: New articles">
+<i class="fas fa-hashtag fa-fw"></i>5539ee6</a></span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="分享到 Linkedin" data-sharer=linkedin data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/ data-title="Synchronized 关键字" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/><i class="fab fa-reddit fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/ data-title="Synchronized 关键字"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/ data-title="Synchronized 关键字"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 人人" data-sharer=renren data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/><i class="fab fa-renren fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/ data-title="Synchronized 关键字"><i data-svg-src=/lib/simple-icons/icons/baidu.min.svg></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/ data-title="Synchronized 关键字"><i class="fab fa-evernote fa-fw"></i></a><a href=javascript:void(0); title="分享到 Skype" data-sharer=skype data-url=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/ data-title="Synchronized 关键字"><i class="fab fa-skype fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/zh-cn/tags/java/>Java</a>,&nbsp;<a href=/zh-cn/tags/concurrency/>Concurrency</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/zh-cn/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/zh-cn/2021/10/java-volatile/ class=prev rel=prev title="Volatile 学习总结"><i class="fas fa-angle-left fa-fw"></i>Volatile 学习总结</a>
+<a href=/zh-cn/2021/10/spring-cloud-ribbon/ class=next rel=next title="Spring Cloud Ribbon">Spring Cloud Ribbon<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="fa fa-theater-masks"></i> </div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/zh-cn/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/katex/katex.min.4710034e669c7ff17f823f9ba12cf8a36582d65b007f79cbc4a3c11d7db2e4ca.css integrity="sha256-RxADTmacf/F/gj+boSz4o2WC1lsAf3nLxKPBHX2y5Mo="><link rel=stylesheet href=/lib/katex/copy-tex.min.bf9ff4137fec38f6255419e142d0883c9c52090885d746f80eee12b273d9b3e0.css integrity="sha256-v5/0E3/sOPYlVBnhQtCIPJxSCQiF10b4Du4SsnPZs+A="><script type=text/javascript src=https://torres-blog.disqus.com/embed.js defer></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript src=/lib/sharer/sharer.min.9c88f86c7f0820287113f6236200459832693656e80d7556cc80a93dfbd45813.js integrity="sha256-nIj4bH8IIChxE/YjYgBFmDJpNlboDXVWzICpPfvUWBM="></script><script type=text/javascript src=/lib/typeit/typeit.min.491c13689db70b6adb3176a9a792644be7578a2f931521f5cb199d313a21c359.js integrity="sha256-SRwTaJ23C2rbMXapp5JkS+dXii+TFSH1yxmdMTohw1k="></script><script type=text/javascript src=/lib/katex/katex.min.17f5dd6b9f123dd7140abfb18521b3f4c036cd004f6f40121182a8865f140877.js integrity="sha256-F/Xda58SPdcUCr+xhSGz9MA2zQBPb0ASEYKohl8UCHc="></script><script type=text/javascript src=/lib/katex/auto-render.min.f74776a677f0d2be0af0264058f928e2ba455d0b19bc985304660d922a43a6b2.js integrity="sha256-90d2pnfw0r4K8CZAWPko4rpFXQsZvJhTBGYNkipDprI="></script><script type=text/javascript src=/lib/katex/copy-tex.min.2ab2237329021bc443986c8327f6e61357fb68a54e5d233d224023718c02207d.js integrity="sha256-KrIjcykCG8RDmGyDJ/bmE1f7aKVOXSM9IkAjcYwCIH0="></script><script type=text/javascript src=/lib/katex/mhchem.min.5cea356d6025c5a2f18c454c83ec5674dbb04fab1cd1d75569e77788c6b6f888.js integrity="sha256-XOo1bWAlxaLxjEVMg+xWdNuwT6sc0ddVaed3iMa2+Ig="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:10},comment:{},data:{"id-1":"Torres","id-2":"Torres"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/zh-cn/index.json",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"lunr"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>

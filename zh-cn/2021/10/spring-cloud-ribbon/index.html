@@ -1,0 +1,1497 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Spring Cloud Ribbon - Torres' 技术博客</title><meta name=Description content="记录我的学习之路"><meta property="og:title" content="Spring Cloud Ribbon">
+<meta property="og:description" content="Ribbon 是 Netflix 公司开源的一个负载均衡项目。可以在 Zuul 中使用 Ribbon 做负载均衡，也可以和 Feign 结合使用。在 Spring Cloud 开发中使用的最多的可能就是 RestTemplate 和 Ribbon。代码可能">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/"><meta property="og:image" content="http://403unauthorized.github.io/logo.ico"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-03T00:07:29+09:00">
+<meta property="article:modified_time" content="2021-10-03T10:25:48+09:00"><meta property="og:site_name" content="Torres' 技术博客">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://403unauthorized.github.io/logo.ico">
+<meta name=twitter:title content="Spring Cloud Ribbon">
+<meta name=twitter:description content="Ribbon 是 Netflix 公司开源的一个负载均衡项目。可以在 Zuul 中使用 Ribbon 做负载均衡，也可以和 Feign 结合使用。在 Spring Cloud 开发中使用的最多的可能就是 RestTemplate 和 Ribbon。代码可能">
+<meta name=application-name content="Torres' Blog">
+<meta name=apple-mobile-web-app-title content="Torres' Blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/><link rel=prev href=http://403unauthorized.github.io/zh-cn/2021/10/java-synchronized/><link rel=stylesheet href=/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Spring Cloud Ribbon","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/spring-cloud-ribbon\/"},"genre":"posts","keywords":"Spring Cloud, Java","wordcount":5871,"url":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/spring-cloud-ribbon\/","datePublished":"2021-10-03T00:07:29+09:00","dateModified":"2021-10-03T10:25:48+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/zh-cn/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/zh-cn/posts/> 文章 </a><a class=menu-item href=/zh-cn/tags/> 标签 </a><a class=menu-item href=/zh-cn/categories/> 分类 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/zh-cn/2021/10/spring-cloud-ribbon/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/zh-cn/ title="Torres' 技术博客"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/zh-cn/posts/ title>文章</a><a class=menu-item href=/zh-cn/tags/ title>标签</a><a class=menu-item href=/zh-cn/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/zh-cn/2021/10/spring-cloud-ribbon/ selected>简体中文</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Spring Cloud Ribbon</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/zh-cn/ title=Author rel=" author" class=author><i class="fas fa-user-circle fa-fw"></i>Torres</a></span>&nbsp;<span class=post-category>收录于 <a href=/zh-cn/categories/programming/><i class="far fa-folder fa-fw"></i>Programming</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-10-03>2021-10-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 5871 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 12 分钟&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#负载均衡初始化>负载均衡初始化</a>
+<ul>
+<li><a href=#loadbalancerautoconfiguration>LoadBalancerAutoConfiguration</a></li>
+<li><a href=#拦截器配置>拦截器配置</a>
+<ul>
+<li><a href=#loadbalancerinterceptor-拦截器>LoadBalancerInterceptor 拦截器</a></li>
+<li><a href=#retryloadbalancerinterceptor-拦截器>RetryLoadBalancerInterceptor 拦截器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href=#loadbalancerclient-源码分析>LoadBalancerClient 源码分析</a></li>
+<li><a href=#dynamicserverlistloadbalancer>DynamicServerListLoadBalancer</a>
+<ul>
+<li><a href=#成员介绍>成员介绍</a></li>
+<li><a href=#irule>IRule</a></li>
+<li><a href=#iping>IPing</a></li>
+<li><a href=#serverlist>ServerList</a></li>
+<li><a href=#serverlistfilter>ServerListFilter</a></li>
+</ul>
+</li>
+<li><a href=#源码分析>源码分析</a>
+<ul>
+<li><a href=#dynamicserverlistloadbalancer-构造方法>DynamicServerListLoadBalancer 构造方法</a></li>
+<li><a href=#restofinit-执行剩下的初始化操作>restOfInit 执行剩下的初始化操作</a></li>
+<li><a href=#obtainserversviadiscovery>obtainServersViaDiscovery</a></li>
+<li><a href=#定时任务更新服务器列表和状态>定时任务更新服务器列表和状态</a></li>
+</ul>
+</li>
+<li><a href=#总结>总结</a></li>
+<li><a href=#ref>Ref</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>Ribbon 是 Netflix 公司开源的一个负载均衡项目。可以在 Zuul 中使用 Ribbon 做负载均衡，也可以和 Feign 结合使用。在 Spring Cloud 开发中使用的最多的可能就是 RestTemplate 和 Ribbon。代码可能如下：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>RibbonConfig</span> <span class=o>{</span>
+    <span class=nd>@Bean</span>
+    <span class=nd>@LoadBalanced</span>
+    <span class=kd>public</span> <span class=n>RestTemplate</span> <span class=nf>restTemplate</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=k>new</span> <span class=n>RestTemplate</span><span class=o>();</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 RestTemplate 消费服务接口的代码可能是这样的：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Service</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>RibbonService</span> <span class=o>{</span>
+    <span class=nd>@Autowired</span>
+    <span class=kd>private</span> <span class=n>RestTemplate</span> <span class=n>restTemplate</span><span class=o>;</span>
+
+    <span class=kd>public</span> <span class=n>String</span> <span class=nf>hi</span><span class=o>(</span><span class=n>String</span> <span class=n>name</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>restTemplate</span><span class=o>.</span><span class=na>getForObject</span><span class=o>(</span><span class=s>&#34;http://eureka-client/hi?name=&#34;</span><span class=o>+</span><span class=n>name</span><span class=o>,</span><span class=n>String</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>RestTemplate 在 Spring 中就已经存在了，查看以上的代码可以发现 RestTemplate Bean 上有一个 @LoadBalanced 注解，这个注解标记在 RestTemplate 上，让负载均衡客户端 LoadBalancerClient 来配置它。</p>
+<h2 id=负载均衡初始化>负载均衡初始化</h2>
+<p>spring-cloud-commons 包中定义了 <strong>LoadBalancerClient</strong> 接口，它是 Ribbon 中一个非常重要的组件。继承结构如下：</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/spring-cloud-ribbon.png/ribbon1.png data-srcset="/images/posts/spring-cloud-ribbon.png/ribbon1.png, /images/posts/spring-cloud-ribbon.png/ribbon1.png 1.5x, /images/posts/spring-cloud-ribbon.png/ribbon1.png 2x" data-sizes=auto alt=/images/posts/spring-cloud-ribbon.png/ribbon1.png title="LoadBalancerClient 继承结构"></p>
+<h3 id=loadbalancerautoconfiguration>LoadBalancerAutoConfiguration</h3>
+<p>而在 spring-cloud-commons 中相同的包下面，可以看到 LoadBalancerAutoConfiguration，看类名就能看出来这是一个自动配置类，会在启动时自动加载其中的配置：</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/spring-cloud-ribbon.png/ribbon2.png data-srcset="/images/posts/spring-cloud-ribbon.png/ribbon2.png, /images/posts/spring-cloud-ribbon.png/ribbon2.png 1.5x, /images/posts/spring-cloud-ribbon.png/ribbon2.png 2x" data-sizes=auto alt=/images/posts/spring-cloud-ribbon.png/ribbon2.png title=LoadBalancerAutoConfiguration></p>
+<p><strong>LoadBalancerAutoConfiguration</strong></p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+<span class=nd>@ConditionalOnClass</span><span class=o>(</span><span class=n>RestTemplate</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=nd>@ConditionalOnBean</span><span class=o>(</span><span class=n>LoadBalancerClient</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=nd>@EnableConfigurationProperties</span><span class=o>(</span><span class=n>LoadBalancerRetryProperties</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>LoadBalancerAutoConfiguration</span> <span class=o>{</span>
+    <span class=c1>// 省略代码。。。主要是对 LoadBalancerInterceptor 和 RetryLoadBalancerInterCeptor 的等进行配置，这里我们看类上的注解@ConditionalOnBean和@ConditionalOnClass
+</span><span class=c1></span><span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到该自动配置类上有注解 <code>@ConditionalOnBean(LoadBalancerClient.class)</code> 和 <code>@ConditionalOnClass(RestTemplate.class)</code>，也就是说此类的生效条件是：</p>
+<blockquote>
+<p>1、当前工程中要有 RestTemplate 类</p>
+<p>2、在 Spring 的 IOC 容器中必须要有 LoadBalancerClient 的实现 Bean</p>
+</blockquote>
+<p>然后我们看到 <code>org.springframework.cloud.netflix.ribbon</code> 这个包，其中有一个 <code>RibbonAutoConfiguration.java</code> 类（继承于 LoadBalancerClient）。查看到其中配置的 Bean，我们可以发现，只要引入了这个包，就一定会创建一个 RibbonLoadBalancerClient 实例对象加入到 IOC 容器中，并且触发 <strong>LoadBalancerAutoConfiguration</strong> 配置。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+<span class=nd>@Conditional</span><span class=o>(</span><span class=n>RibbonAutoConfiguration</span><span class=o>.</span><span class=na>RibbonClassesConditions</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=nd>@RibbonClients</span>
+<span class=nd>@AutoConfigureAfter</span><span class=o>(</span>
+        <span class=n>name</span> <span class=o>=</span> <span class=s>&#34;org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration&#34;</span><span class=o>)</span>
+<span class=nd>@AutoConfigureBefore</span><span class=o>({</span> <span class=n>LoadBalancerAutoConfiguration</span><span class=o>.</span><span class=na>class</span><span class=o>,</span>
+        <span class=n>AsyncLoadBalancerAutoConfiguration</span><span class=o>.</span><span class=na>class</span> <span class=o>})</span>
+<span class=nd>@EnableConfigurationProperties</span><span class=o>({</span> <span class=n>RibbonEagerLoadProperties</span><span class=o>.</span><span class=na>class</span><span class=o>,</span>
+        <span class=n>ServerIntrospectorProperties</span><span class=o>.</span><span class=na>class</span> <span class=o>})</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>RibbonAutoConfiguration</span> <span class=o>{</span>
+    <span class=c1>// 省略。。。
+</span><span class=c1></span>    <span class=nd>@Bean</span>
+    <span class=nd>@ConditionalOnMissingBean</span><span class=o>(</span><span class=n>LoadBalancerClient</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+    <span class=kd>public</span> <span class=n>LoadBalancerClient</span> <span class=nf>loadBalancerClient</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=k>new</span> <span class=n>RibbonLoadBalancerClient</span><span class=o>(</span><span class=n>springClientFactory</span><span class=o>());</span>
+    <span class=o>}</span>
+    <span class=c1>// 省略。。。
+</span><span class=c1></span><span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们再看回 LoadBalancerAutoConfiguration，该自动化配置类，主要做了几个配置：</p>
+<p>1、维护了一个被 @LoadBalanced 注解修饰的 <strong>RestTemplate 对象列表</strong></p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+<span class=nd>@ConditionalOnClass</span><span class=o>(</span><span class=n>RestTemplate</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=nd>@ConditionalOnBean</span><span class=o>(</span><span class=n>LoadBalancerClient</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=nd>@EnableConfigurationProperties</span><span class=o>(</span><span class=n>LoadBalancerRetryProperties</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>LoadBalancerAutoConfiguration</span> <span class=o>{</span>
+
+    <span class=nd>@LoadBalanced</span>
+    <span class=nd>@Autowired</span><span class=o>(</span><span class=n>required</span> <span class=o>=</span> <span class=kc>false</span><span class=o>)</span>
+    <span class=kd>private</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>RestTemplate</span><span class=o>&gt;</span> <span class=n>restTemplates</span> <span class=o>=</span> <span class=n>Collections</span><span class=o>.</span><span class=na>emptyList</span><span class=o>();</span>
+    <span class=c1>// ...
+</span><span class=c1></span><span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>2、为每个对象通过调用 RestTemplateCustomizer 添加了一个 <code>LoadBalancerInterceptor</code> 和 <code>RetryLoadBalancerInterceptor</code> 拦截器。他们都是 ClientHttpRequestInterceptor 接口的实现类，<code>ClientHttpRequestInterceptor</code> 是 <code>RestTemplate</code> 的请求拦截器。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Bean</span>
+<span class=kd>public</span> <span class=n>SmartInitializingSingleton</span> <span class=nf>loadBalancedRestTemplateInitializerDeprecated</span><span class=o>(</span>
+        <span class=kd>final</span> <span class=n>ObjectProvider</span><span class=o>&lt;</span><span class=n>List</span><span class=o>&lt;</span><span class=n>RestTemplateCustomizer</span><span class=o>&gt;&gt;</span> <span class=n>restTemplateCustomizers</span><span class=o>)</span> <span class=o>{</span>
+    <span class=k>return</span> <span class=o>()</span> <span class=o>-&gt;</span> <span class=n>restTemplateCustomizers</span><span class=o>.</span><span class=na>ifAvailable</span><span class=o>(</span><span class=n>customizers</span> <span class=o>-&gt;</span> <span class=o>{</span>
+        <span class=k>for</span> <span class=o>(</span><span class=n>RestTemplate</span> <span class=n>restTemplate</span> <span class=o>:</span> <span class=n>LoadBalancerAutoConfiguration</span><span class=o>.</span><span class=na>this</span><span class=o>.</span><span class=na>restTemplates</span><span class=o>)</span> <span class=o>{</span>
+            <span class=k>for</span> <span class=o>(</span><span class=n>RestTemplateCustomizer</span> <span class=n>customizer</span> <span class=o>:</span> <span class=n>customizers</span><span class=o>)</span> <span class=o>{</span>
+                <span class=n>customizer</span><span class=o>.</span><span class=na>customize</span><span class=o>(</span><span class=n>restTemplate</span><span class=o>);</span>
+            <span class=o>}</span>
+        <span class=o>}</span>
+    <span class=o>});</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=拦截器配置>拦截器配置</h3>
+<h4 id=loadbalancerinterceptor-拦截器>LoadBalancerInterceptor 拦截器</h4>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// LoadBalancerAutoconfiguration.java
+</span><span class=c1></span><span class=nd>@Configuration</span>
+<span class=nd>@ConditionalOnMissingClass</span><span class=o>(</span><span class=s>&#34;org.springframework.retry.support.RetryTemplate&#34;</span><span class=o>)</span>
+<span class=kd>static</span> <span class=kd>class</span> <span class=nc>LoadBalancerInterceptorConfig</span> <span class=o>{</span>
+
+    <span class=nd>@Bean</span>
+    <span class=kd>public</span> <span class=n>LoadBalancerInterceptor</span> <span class=nf>ribbonInterceptor</span><span class=o>(</span>
+            <span class=n>LoadBalancerClient</span> <span class=n>loadBalancerClient</span><span class=o>,</span>
+            <span class=n>LoadBalancerRequestFactory</span> <span class=n>requestFactory</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=k>new</span> <span class=n>LoadBalancerInterceptor</span><span class=o>(</span><span class=n>loadBalancerClient</span><span class=o>,</span> <span class=n>requestFactory</span><span class=o>);</span>
+    <span class=o>}</span>
+
+    <span class=nd>@Bean</span>
+    <span class=nd>@ConditionalOnMissingBean</span>
+    <span class=kd>public</span> <span class=n>RestTemplateCustomizer</span> <span class=nf>restTemplateCustomizer</span><span class=o>(</span>
+            <span class=kd>final</span> <span class=n>LoadBalancerInterceptor</span> <span class=n>loadBalancerInterceptor</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>restTemplate</span> <span class=o>-&gt;</span> <span class=o>{</span>
+            <span class=c1>// 此处可见 LoadBalancerInterceptor 是 ClientHttpRequestInterceptor 的实现类
+</span><span class=c1></span>            <span class=n>List</span><span class=o>&lt;</span><span class=n>ClientHttpRequestInterceptor</span><span class=o>&gt;</span> <span class=n>list</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;&gt;(</span>
+                    <span class=n>restTemplate</span><span class=o>.</span><span class=na>getInterceptors</span><span class=o>());</span>
+            <span class=n>list</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>loadBalancerInterceptor</span><span class=o>);</span>
+            <span class=n>restTemplate</span><span class=o>.</span><span class=na>setInterceptors</span><span class=o>(</span><span class=n>list</span><span class=o>);</span>
+        <span class=o>};</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id=retryloadbalancerinterceptor-拦截器>RetryLoadBalancerInterceptor 拦截器</h4>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+<span class=nd>@ConditionalOnClass</span><span class=o>(</span><span class=n>RetryTemplate</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+<span class=kd>public</span> <span class=kd>static</span> <span class=kd>class</span> <span class=nc>RetryInterceptorAutoConfiguration</span> <span class=o>{</span>
+
+    <span class=nd>@Bean</span>
+    <span class=nd>@ConditionalOnMissingBean</span>
+    <span class=kd>public</span> <span class=n>RetryLoadBalancerInterceptor</span> <span class=nf>ribbonInterceptor</span><span class=o>(</span>
+            <span class=n>LoadBalancerClient</span> <span class=n>loadBalancerClient</span><span class=o>,</span>
+            <span class=n>LoadBalancerRetryProperties</span> <span class=n>properties</span><span class=o>,</span>
+            <span class=n>LoadBalancerRequestFactory</span> <span class=n>requestFactory</span><span class=o>,</span>
+            <span class=n>LoadBalancedRetryFactory</span> <span class=n>loadBalancedRetryFactory</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=k>new</span> <span class=n>RetryLoadBalancerInterceptor</span><span class=o>(</span><span class=n>loadBalancerClient</span><span class=o>,</span> <span class=n>properties</span><span class=o>,</span>
+                <span class=n>requestFactory</span><span class=o>,</span> <span class=n>loadBalancedRetryFactory</span><span class=o>);</span>
+    <span class=o>}</span>
+
+    <span class=nd>@Bean</span>
+    <span class=nd>@ConditionalOnMissingBean</span>
+    <span class=kd>public</span> <span class=n>RestTemplateCustomizer</span> <span class=nf>restTemplateCustomizer</span><span class=o>(</span>
+            <span class=kd>final</span> <span class=n>RetryLoadBalancerInterceptor</span> <span class=n>loadBalancerInterceptor</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>restTemplate</span> <span class=o>-&gt;</span> <span class=o>{</span>
+            <span class=c1>// RetryLoadBalancerInterceptor 也是 ClientHttpRequestInterceptor 的实现类
+</span><span class=c1></span>            <span class=n>List</span><span class=o>&lt;</span><span class=n>ClientHttpRequestInterceptor</span><span class=o>&gt;</span> <span class=n>list</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;&gt;(</span>
+                    <span class=n>restTemplate</span><span class=o>.</span><span class=na>getInterceptors</span><span class=o>());</span>
+            <span class=n>list</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>loadBalancerInterceptor</span><span class=o>);</span>
+            <span class=n>restTemplate</span><span class=o>.</span><span class=na>setInterceptors</span><span class=o>(</span><span class=n>list</span><span class=o>);</span>
+        <span class=o>};</span>
+    <span class=o>}</span>
+
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>由此可见，在程序启动的时候，如果环境中引入了相应的依赖，则会在初始化时对负载均衡器进行配置，实现的方式则是为被 @LoadBalanced 注解修饰的 RestTemplate 对象添加负载均衡拦截器。</p>
+<h2 id=loadbalancerclient-源码分析>LoadBalancerClient 源码分析</h2>
+<p>首先我们先跟进到上文提到的拦截器(LoadBalancerInterceptor)中，可以发现，在拦截方法（intercept）中，最终是调用了 LoadBalancerClient 的 execute 方法。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>LoadBalancerInterceptor</span> <span class=kd>implements</span> <span class=n>ClientHttpRequestInterceptor</span> <span class=o>{</span>
+
+    <span class=kd>private</span> <span class=n>LoadBalancerClient</span> <span class=n>loadBalancer</span><span class=o>;</span>
+
+    <span class=c1>// ...
+</span><span class=c1></span>
+    <span class=nd>@Override</span>
+    <span class=kd>public</span> <span class=n>ClientHttpResponse</span> <span class=nf>intercept</span><span class=o>(</span><span class=kd>final</span> <span class=n>HttpRequest</span> <span class=n>request</span><span class=o>,</span> <span class=kd>final</span> <span class=kt>byte</span><span class=o>[]</span> <span class=n>body</span><span class=o>,</span>
+            <span class=kd>final</span> <span class=n>ClientHttpRequestExecution</span> <span class=n>execution</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IOException</span> <span class=o>{</span>
+        <span class=kd>final</span> <span class=n>URI</span> <span class=n>originalUri</span> <span class=o>=</span> <span class=n>request</span><span class=o>.</span><span class=na>getURI</span><span class=o>();</span>
+        <span class=n>String</span> <span class=n>serviceName</span> <span class=o>=</span> <span class=n>originalUri</span><span class=o>.</span><span class=na>getHost</span><span class=o>();</span>
+        <span class=n>Assert</span><span class=o>.</span><span class=na>state</span><span class=o>(</span><span class=n>serviceName</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>,</span>
+                <span class=s>&#34;Request URI does not contain a valid hostname: &#34;</span> <span class=o>+</span> <span class=n>originalUri</span><span class=o>);</span>
+        <span class=k>return</span> <span class=k>this</span><span class=o>.</span><span class=na>loadBalancer</span><span class=o>.</span><span class=na>execute</span><span class=o>(</span><span class=n>serviceName</span><span class=o>,</span>
+                <span class=k>this</span><span class=o>.</span><span class=na>requestFactory</span><span class=o>.</span><span class=na>createRequest</span><span class=o>(</span><span class=n>request</span><span class=o>,</span> <span class=n>body</span><span class=o>,</span> <span class=n>execution</span><span class=o>));</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>LoadBalancerClient</strong> 接口中有三个方法：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>LoadBalancerClient</span> <span class=kd>extends</span> <span class=n>ServiceInstanceChooser</span> <span class=o>{</span>
+    <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>T</span> <span class=nf>execute</span><span class=o>(</span><span class=n>String</span> <span class=n>serviceId</span><span class=o>,</span> <span class=n>LoadBalancerRequest</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>request</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IOException</span><span class=o>;</span>
+    <span class=c1>// 使用 LoadBalancer 的 ServiceInstance，对其执行请求，返回结果
+</span><span class=c1></span>    <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>T</span> <span class=nf>execute</span><span class=o>(</span><span class=n>String</span> <span class=n>serviceId</span><span class=o>,</span> <span class=n>ServiceInstance</span> <span class=n>serviceInstance</span><span class=o>,</span> <span class=n>LoadBalancerRequest</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>request</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IOException</span><span class=o>;</span>
+    <span class=c1>// 构造一个包含主机和端口的真正的 url
+</span><span class=c1></span>    <span class=c1>// http://serviceId/path/... --&gt; http://host:port/path/...
+</span><span class=c1></span>    <span class=n>URI</span> <span class=nf>reconstructURI</span><span class=o>(</span><span class=n>ServiceInstance</span> <span class=n>instance</span><span class=o>,</span> <span class=n>URI</span> <span class=n>original</span><span class=o>);</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其父类 ServiceInstanceChooser 中的方法：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>ServiceInstanceChooser</span> <span class=o>{</span>
+    <span class=n>ServiceInstance</span> <span class=nf>choose</span><span class=o>(</span><span class=n>String</span> <span class=n>serviceId</span><span class=o>);</span> <span class=c1>// 通过 serviceId 选择服务
+</span><span class=c1></span><span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从继承关系里，LoadBalancerClient 的实现类就是 RibbonLoadBalancerClient 类了。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// RibbonLoadBalancerClient.java
+</span><span class=c1></span><span class=kd>public</span> <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>T</span> <span class=nf>execute</span><span class=o>(</span><span class=n>String</span> <span class=n>serviceId</span><span class=o>,</span> <span class=n>LoadBalancerRequest</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>request</span><span class=o>,</span> <span class=n>Object</span> <span class=n>hint</span><span class=o>)</span>
+        <span class=kd>throws</span> <span class=n>IOException</span> <span class=o>{</span>
+    <span class=c1>// 通过服务名获取到负载均衡器，ILoadBalancer 实现类为 DynamicServerListLoadBalancer，下文会提到
+</span><span class=c1></span>    <span class=n>ILoadBalancer</span> <span class=n>loadBalancer</span> <span class=o>=</span> <span class=n>getLoadBalancer</span><span class=o>(</span><span class=n>serviceId</span><span class=o>);</span>
+    <span class=c1>// 通过调用负载均衡器的 chooseServer 方法获取到服务器
+</span><span class=c1></span>    <span class=n>Server</span> <span class=n>server</span> <span class=o>=</span> <span class=n>getServer</span><span class=o>(</span><span class=n>loadBalancer</span><span class=o>,</span> <span class=n>hint</span><span class=o>);</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>server</span> <span class=o>==</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>throw</span> <span class=k>new</span> <span class=n>IllegalStateException</span><span class=o>(</span><span class=s>&#34;No instances available for &#34;</span> <span class=o>+</span> <span class=n>serviceId</span><span class=o>);</span>
+    <span class=o>}</span>
+    <span class=n>RibbonServer</span> <span class=n>ribbonServer</span> <span class=o>=</span> <span class=k>new</span> <span class=n>RibbonServer</span><span class=o>(</span><span class=n>serviceId</span><span class=o>,</span> <span class=n>server</span><span class=o>,</span>
+            <span class=n>isSecure</span><span class=o>(</span><span class=n>server</span><span class=o>,</span> <span class=n>serviceId</span><span class=o>),</span>
+            <span class=n>serverIntrospector</span><span class=o>(</span><span class=n>serviceId</span><span class=o>).</span><span class=na>getMetadata</span><span class=o>(</span><span class=n>server</span><span class=o>));</span>
+
+    <span class=k>return</span> <span class=n>execute</span><span class=o>(</span><span class=n>serviceId</span><span class=o>,</span> <span class=n>ribbonServer</span><span class=o>,</span> <span class=n>request</span><span class=o>);</span>
+<span class=o>}</span>
+<span class=nd>@Override</span>
+<span class=kd>public</span> <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>T</span> <span class=nf>execute</span><span class=o>(</span><span class=n>String</span> <span class=n>serviceId</span><span class=o>,</span> <span class=n>ServiceInstance</span> <span class=n>serviceInstance</span><span class=o>,</span>
+        <span class=n>LoadBalancerRequest</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>request</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IOException</span> <span class=o>{</span>
+    <span class=n>Server</span> <span class=n>server</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>serviceInstance</span> <span class=k>instanceof</span> <span class=n>RibbonServer</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>server</span> <span class=o>=</span> <span class=o>((</span><span class=n>RibbonServer</span><span class=o>)</span> <span class=n>serviceInstance</span><span class=o>).</span><span class=na>getServer</span><span class=o>();</span>
+    <span class=o>}</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>server</span> <span class=o>==</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>throw</span> <span class=k>new</span> <span class=n>IllegalStateException</span><span class=o>(</span><span class=s>&#34;No instances available for &#34;</span> <span class=o>+</span> <span class=n>serviceId</span><span class=o>);</span>
+    <span class=o>}</span>
+
+    <span class=n>RibbonLoadBalancerContext</span> <span class=n>context</span> <span class=o>=</span> <span class=k>this</span><span class=o>.</span><span class=na>clientFactory</span>
+            <span class=o>.</span><span class=na>getLoadBalancerContext</span><span class=o>(</span><span class=n>serviceId</span><span class=o>);</span>
+    <span class=n>RibbonStatsRecorder</span> <span class=n>statsRecorder</span> <span class=o>=</span> <span class=k>new</span> <span class=n>RibbonStatsRecorder</span><span class=o>(</span><span class=n>context</span><span class=o>,</span> <span class=n>server</span><span class=o>);</span>
+
+    <span class=k>try</span> <span class=o>{</span>
+        <span class=n>T</span> <span class=n>returnVal</span> <span class=o>=</span> <span class=n>request</span><span class=o>.</span><span class=na>apply</span><span class=o>(</span><span class=n>serviceInstance</span><span class=o>);</span>
+        <span class=n>statsRecorder</span><span class=o>.</span><span class=na>recordStats</span><span class=o>(</span><span class=n>returnVal</span><span class=o>);</span>
+        <span class=k>return</span> <span class=n>returnVal</span><span class=o>;</span>
+    <span class=o>}</span>
+    <span class=c1>// catch IOException and rethrow so RestTemplate behaves correctly
+</span><span class=c1></span>    <span class=k>catch</span> <span class=o>(</span><span class=n>IOException</span> <span class=n>ex</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>statsRecorder</span><span class=o>.</span><span class=na>recordStats</span><span class=o>(</span><span class=n>ex</span><span class=o>);</span>
+        <span class=k>throw</span> <span class=n>ex</span><span class=o>;</span>
+    <span class=o>}</span>
+    <span class=k>catch</span> <span class=o>(</span><span class=n>Exception</span> <span class=n>ex</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>statsRecorder</span><span class=o>.</span><span class=na>recordStats</span><span class=o>(</span><span class=n>ex</span><span class=o>);</span>
+        <span class=n>ReflectionUtils</span><span class=o>.</span><span class=na>rethrowRuntimeException</span><span class=o>(</span><span class=n>ex</span><span class=o>);</span>
+    <span class=o>}</span>
+    <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>RibbonLoadBalancerClient 在 <code>execute</code> 中调用 <code>getServer</code> 方法来获取 Server 对象，跟踪源码可以看到，最终是通过 ILoadBalancer 的 <code>chooseServer</code> 去选择服务实例。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// RibbonLoadBalancerClient.java
+</span><span class=c1></span><span class=kd>protected</span> <span class=n>Server</span> <span class=nf>getServer</span><span class=o>(</span><span class=n>String</span> <span class=n>serviceId</span><span class=o>)</span> <span class=o>{</span>
+    <span class=c1>// 通过 SpringClientFactory 获取 LoadBalancer 对象
+</span><span class=c1></span>    <span class=c1>// 内部是通过反射，用构造方法构造一个实例对象
+</span><span class=c1></span>    <span class=k>return</span> <span class=n>getServer</span><span class=o>(</span><span class=n>getLoadBalancer</span><span class=o>(</span><span class=n>serviceId</span><span class=o>),</span> <span class=kc>null</span><span class=o>);</span>
+<span class=o>}</span>
+
+<span class=kd>protected</span> <span class=n>Server</span> <span class=nf>getServer</span><span class=o>(</span><span class=n>ILoadBalancer</span> <span class=n>loadBalancer</span><span class=o>)</span> <span class=o>{</span>
+    <span class=k>return</span> <span class=n>getServer</span><span class=o>(</span><span class=n>loadBalancer</span><span class=o>,</span> <span class=kc>null</span><span class=o>);</span>
+<span class=o>}</span>
+
+<span class=kd>protected</span> <span class=n>Server</span> <span class=nf>getServer</span><span class=o>(</span><span class=n>ILoadBalancer</span> <span class=n>loadBalancer</span><span class=o>,</span> <span class=n>Object</span> <span class=n>hint</span><span class=o>)</span> <span class=o>{</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>loadBalancer</span> <span class=o>==</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
+    <span class=o>}</span>
+    <span class=c1>// Use &#39;default&#39; on a null hint, or just pass it on?
+</span><span class=c1></span>    <span class=c1>// 通过 ILoadBalancer 的 chooseServer 方法获取 Server 对象
+</span><span class=c1></span>    <span class=k>return</span> <span class=n>loadBalancer</span><span class=o>.</span><span class=na>chooseServer</span><span class=o>(</span><span class=n>hint</span> <span class=o>!=</span> <span class=kc>null</span> <span class=o>?</span> <span class=n>hint</span> <span class=o>:</span> <span class=s>&#34;default&#34;</span><span class=o>);</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>ILoadBalancer</span> <span class=o>{</span>
+    <span class=c1>// 添加一个 Server 集合
+</span><span class=c1></span>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>addServers</span><span class=o>(</span><span class=n>List</span><span class=o>&lt;</span><span class=n>Server</span><span class=o>&gt;</span> <span class=n>newServers</span><span class=o>);</span>
+    <span class=c1>// 根据 key 获取 Server
+</span><span class=c1></span>    <span class=kd>public</span> <span class=n>Server</span> <span class=nf>chooseServer</span><span class=o>(</span><span class=n>Object</span> <span class=n>key</span><span class=o>);</span>
+    <span class=c1>// 标记某个服务下线
+</span><span class=c1></span>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>markServerDown</span><span class=o>(</span><span class=n>Server</span> <span class=n>server</span><span class=o>);</span>
+    <span class=c1>// 获取可用的 Server 集合
+</span><span class=c1></span>    <span class=kd>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>Server</span><span class=o>&gt;</span> <span class=nf>getReachableServers</span><span class=o>();</span>
+    <span class=c1>// 获取所有的 Server集合
+</span><span class=c1></span>    <span class=kd>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>Server</span><span class=o>&gt;</span> <span class=nf>getAllServers</span><span class=o>();</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=dynamicserverlistloadbalancer>DynamicServerListLoadBalancer</h2>
+<p>跟踪源码后，我们可以找到 ILoadBalancer 的继承结构如下，DynamicServerListLoadBalancer 继承了 ILoadBalancer，也就是说我们可以通过跟踪这个类来搞清楚 Ribbon 是如何实现负载均衡的。</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/spring-cloud-ribbon.png/ribbon3.png data-srcset="/images/posts/spring-cloud-ribbon.png/ribbon3.png, /images/posts/spring-cloud-ribbon.png/ribbon3.png 1.5x, /images/posts/spring-cloud-ribbon.png/ribbon3.png 2x" data-sizes=auto alt=/images/posts/spring-cloud-ribbon.png/ribbon3.png title="ILoadBalancer 继承结构"></p>
+<h3 id=成员介绍>成员介绍</h3>
+<p>查看 DynamicServerListLoadBalancer，BaseLoadBalancer，ILoadBalancer 这三个类，配置了 IClientConfig，IRule，IPing，ServerList，ServerListFilter 和 ILoadBalancer，在 BaseLoadBalancer 中，默认进行了以下配置：</p>
+<ul>
+<li>IClientConfig ribbonClientConfig：DefaultClientConfigImpl 配置（用于客户端的负载均衡配置）</li>
+<li>IRule ribbonRule：默认路由策略为 RoundRobinRule</li>
+<li>IPing ribbonPing：DummyPing</li>
+<li>ServerList ribbonServerList：ConfigurationBasedServerList</li>
+<li>ServerListFilter ribbonServerListFilter：ZonePreferenceServerListFilter</li>
+<li>ILoadBalancer ribbonLoadBalancer：ZoneAwareLoadBalancer</li>
+</ul>
+<h3 id=irule>IRule</h3>
+<p>IRule 有很多默认的实现类，都通过不同的算法来处理负载均衡，Ribbon 中实现的 IRule 又以下几种：</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/spring-cloud-ribbon.png/ribbon4.png data-srcset="/images/posts/spring-cloud-ribbon.png/ribbon4.png, /images/posts/spring-cloud-ribbon.png/ribbon4.png 1.5x, /images/posts/spring-cloud-ribbon.png/ribbon4.png 2x" data-sizes=auto alt=/images/posts/spring-cloud-ribbon.png/ribbon4.png title="IRule 实现类"></p>
+<p><strong>IRule 实现类</strong></p>
+<ul>
+<li>BestAvailableRule：选择最小请求数</li>
+<li>ClientConfigEnabledRoundRobinRule：轮询</li>
+<li>RandomRule：随机选择 Server</li>
+<li>RoundRobinRule：轮询</li>
+<li>WeightedResponseTimeRule：根据响应时间分配一个权重 weight，weight越低，被选择的可能性就越低</li>
+<li>ZoneAvoidanceRule：根据 Server 的 Zone 区域和可用性轮询选择</li>
+</ul>
+<h3 id=iping>IPing</h3>
+<p>IPing 的实现类又 PingUrl，PingConstant，NoOpPing，DummyPing 和 NIWSDiscoveryPing。IPing 接口中有一个 <code>isAlive</code> 方法。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kt>boolean</span> <span class=nf>isAlive</span><span class=o>(</span><span class=n>Server</span> <span class=n>Server</span><span class=o>);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过向 Server 发送 ping 信号，来判断 Server 是否可用</p>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/spring-cloud-ribbon.png/ribbon5.png data-srcset="/images/posts/spring-cloud-ribbon.png/ribbon5.png, /images/posts/spring-cloud-ribbon.png/ribbon5.png 1.5x, /images/posts/spring-cloud-ribbon.png/ribbon5.png 2x" data-sizes=auto alt=/images/posts/spring-cloud-ribbon.png/ribbon5.png title="IPing 实现类"></p>
+<p><strong>IPing 实现类</strong></p>
+<ul>
+<li>PingUrl 真实的去ping 某个url，判断其是否alive</li>
+<li>PingConstant 固定返回某服务是否可用，默认返回true，即可用</li>
+<li>NoOpPing 不去ping,直接返回true,即可用。</li>
+<li>DummyPing 直接返回true，并实现了initWithNiwsConfig方法。</li>
+<li>NIWSDiscoveryPing，根据DiscoveryEnabledServer的InstanceInfo的InstanceStatus去判断，如果为InstanceStatus.UP，则为可用，否则不可用。</li>
+</ul>
+<h3 id=serverlist>ServerList</h3>
+<p>ServerList 是定义了获取所有的 Server 的注册列表信息的接口。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>ServerList</span><span class=o>&lt;</span><span class=n>T</span> <span class=kd>extends</span> <span class=n>Server</span><span class=o>&gt;</span> <span class=o>{</span>
+    <span class=kd>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>getInitialListOfServers</span><span class=o>();</span>
+    <span class=kd>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>getUpdatedListOfServers</span><span class=o>();</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其实现类是 <code>DiscoveryEnabledNIWSServerList</code>。</p>
+<h3 id=serverlistfilter>ServerListFilter</h3>
+<p>ServerListFilter 可根据配置过滤或者根据特性动态获取符合条件的 Server 列表。该类也是一个接口</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>ServerListFilter</span><span class=o>&lt;</span><span class=n>T</span> <span class=kd>extends</span> <span class=n>Server</span><span class=o>&gt;</span> <span class=o>{</span>
+    <span class=kd>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>getFilteredListOfServers</span><span class=o>(</span><span class=n>List</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>servers</span><span class=o>);</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=源码分析>源码分析</h2>
+<p>在 SpringClientFactory 中获取 LoadBalancer 的方法中，我们能看到获取实例的方法是通过反射获取到实现类的含有 IClientConfig 参数的构造方法来构造实例对象。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// SpringClientFactory.java
+</span><span class=c1></span><span class=kd>static</span> <span class=o>&lt;</span><span class=n>C</span><span class=o>&gt;</span> <span class=n>C</span> <span class=nf>instantiateWithConfig</span><span class=o>(</span><span class=n>AnnotationConfigApplicationContext</span> <span class=n>context</span><span class=o>,</span>
+        <span class=n>Class</span><span class=o>&lt;</span><span class=n>C</span><span class=o>&gt;</span> <span class=n>clazz</span><span class=o>,</span> <span class=n>IClientConfig</span> <span class=n>config</span><span class=o>)</span> <span class=o>{</span>
+    <span class=n>C</span> <span class=n>result</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+    <span class=k>try</span> <span class=o>{</span>
+        <span class=c1>// 获取到 ILoadBalancer 实现类的构造方法
+</span><span class=c1></span>        <span class=n>Constructor</span><span class=o>&lt;</span><span class=n>C</span><span class=o>&gt;</span> <span class=n>constructor</span> <span class=o>=</span> <span class=n>clazz</span><span class=o>.</span><span class=na>getConstructor</span><span class=o>(</span><span class=n>IClientConfig</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
+        <span class=c1>// 通过构造方法构造实例对象
+</span><span class=c1></span>        <span class=n>result</span> <span class=o>=</span> <span class=n>constructor</span><span class=o>.</span><span class=na>newInstance</span><span class=o>(</span><span class=n>config</span><span class=o>);</span>
+    <span class=o>}</span>
+    <span class=k>catch</span> <span class=o>(</span><span class=n>Throwable</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+        <span class=c1>// Ignored
+</span><span class=c1></span>    <span class=o>}</span>
+    <span class=c1>// ...
+</span><span class=c1></span>    <span class=k>return</span> <span class=n>result</span><span class=o>;</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=dynamicserverlistloadbalancer-构造方法>DynamicServerListLoadBalancer 构造方法</h3>
+<p>DynamicServerListLoadBalancer 中的构造方法中调用了一个方法 - <code>initWithNiwsConfig()</code>。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// DynamicServerListLoadBalancer.java
+</span><span class=c1></span><span class=kd>public</span> <span class=nf>DynamicServerListLoadBalancer</span><span class=o>(</span><span class=n>IClientConfig</span> <span class=n>clientConfig</span><span class=o>)</span> <span class=o>{</span>
+    <span class=n>initWithNiwsConfig</span><span class=o>(</span><span class=n>clientConfig</span><span class=o>);</span>
+<span class=o>}</span>
+<span class=kd>public</span> <span class=nf>initWithNiwsConfig</span><span class=o>(</span><span class=n>IClientConfig</span> <span class=n>clientConfig</span><span class=o>)</span> <span class=o>{</span>
+    <span class=k>try</span> <span class=o>{</span>
+        <span class=kd>super</span><span class=o>.</span><span class=na>initWithNiwsConfig</span><span class=o>(</span><span class=n>clientConfig</span><span class=o>);</span>
+        <span class=c1>// 获取 ServerList 的 classname
+</span><span class=c1></span>        <span class=n>String</span> <span class=n>niwsServerListClassname</span> <span class=o>=</span> <span class=n>clientConfig</span><span class=o>.</span><span class=na>getPropertyAsString</span><span class=o>(</span><span class=n>CommonClientConfigKey</span><span class=o>.</span><span class=na>NIWSServerListClassName</span><span class=o>,</span> <span class=n>DefaultClientConfigImpl</span><span class=o>.</span><span class=na>DEFAULT_SERVER_LIST_CLASS</span><span class=o>);</span>
+        <span class=c1>// 构造 ServerList
+</span><span class=c1></span>        <span class=n>ServerList</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>niwsServerListImpl</span> <span class=o>=</span> <span class=o>(</span><span class=n>ServerList</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;)</span> <span class=n>ClientFactory</span><span class=o>.</span><span class=na>instantiateInstanceWithClientConfig</span><span class=o>(</span><span class=n>niwsServerListClassName</span><span class=o>,</span> <span class=n>clientConfig</span><span class=o>);</span>
+        <span class=c1>// 如果该 ServerList 是 AbstractServerList 的子类，则获取并设置过滤器
+</span><span class=c1></span>        <span class=k>if</span> <span class=o>(</span><span class=n>niwsServerListImpl</span> <span class=k>instanceof</span> <span class=n>AbstractServerList</span><span class=o>)</span> <span class=o>{</span>
+            <span class=n>AbstractServerListFilter</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>niwsFilter</span> <span class=o>=</span> <span class=o>((</span><span class=n>AbstractServerList</span><span class=o>)</span> <span class=n>niwsServerListImpl</span><span class=o>).</span><span class=na>getFilterImpl</span><span class=o>(</span><span class=n>clientConfig</span><span class=o>);</span>
+            <span class=n>niwsFilter</span><span class=o>.</span><span class=na>setLoadBalancerStats</span><span class=o>(</span><span class=n>getLoadBalancerStats</span><span class=o>());</span>
+            <span class=k>this</span><span class=o>.</span><span class=na>filter</span> <span class=o>=</span> <span class=n>niwsFilter</span><span class=o>;</span>
+        <span class=o>}</span>
+        <span class=c1>// 获取 ServerListUpdater 的 classname
+</span><span class=c1></span>        <span class=n>String</span> <span class=n>serverListUpdaterClassName</span> <span class=o>=</span> <span class=n>clientConfig</span><span class=o>.</span><span class=na>getPropertyAsString</span><span class=o>(</span>
+            <span class=n>CommonClientConfigKey</span><span class=o>.</span><span class=na>ServerListUpdaterClassname</span><span class=o>,</span>
+            <span class=n>DefaultClientConfigImpl</span><span class=o>.</span><span class=na>DEFAULT_SERVER_LIST_UPDATER_CLASS</span>
+        <span class=o>);</span>
+
+        <span class=c1>// 通过 classname 构造 ServerListUpdater 设置到 serverListUpdater 成员属性中
+</span><span class=c1></span>        <span class=k>this</span><span class=o>.</span><span class=na>serverListUpdater</span> <span class=o>=</span> <span class=o>(</span><span class=n>ServerListUpdater</span><span class=o>)</span> <span class=n>ClientFactory</span>
+            <span class=o>.</span><span class=na>instantiateInstanceWithClientConfig</span><span class=o>(</span><span class=n>serverListUpdaterClassName</span><span class=o>,</span> <span class=n>clientConfig</span><span class=o>);</span>
+        <span class=c1>// 执行剩下的初始化操作
+</span><span class=c1></span>        <span class=n>restOfInit</span><span class=o>(</span><span class=n>clientConfig</span><span class=o>);</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=restofinit-执行剩下的初始化操作>restOfInit 执行剩下的初始化操作</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// DynamicServerListLoadBalancer.java
+</span><span class=c1></span><span class=kt>void</span> <span class=nf>restOfInit</span><span class=o>(</span><span class=n>IClientConfig</span> <span class=n>clientConfig</span><span class=o>)</span> <span class=o>{</span>
+    <span class=kt>boolean</span> <span class=n>primeConnection</span> <span class=o>=</span> <span class=k>this</span><span class=o>.</span><span class=na>isEnablePrimingConnections</span><span class=o>();</span>
+    <span class=c1>// 将这个关闭来避免 BaseLoadBalancer.setServerList() 中重复的异步启动
+</span><span class=c1></span>    <span class=k>this</span><span class=o>.</span><span class=na>setEnablePrimingConnections</span><span class=o>(</span><span class=kc>false</span><span class=o>);</span>
+    <span class=n>enableAndInitLearnNewServersFeature</span><span class=o>();</span>
+
+    <span class=n>updateListOfServers</span><span class=o>();</span> <span class=c1>// 用来获取所有的 Server 
+</span><span class=c1></span>    <span class=k>if</span> <span class=o>(</span><span class=n>primeConnection</span> <span class=o>&amp;&amp;</span> <span class=k>this</span><span class=o>.</span><span class=na>getPrimeConnections</span><span class=o>()</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>getPrimeConnections</span><span class=o>().</span><span class=na>primeConnections</span><span class=o>(</span><span class=n>getReachableServers</span><span class=o>());</span>
+    <span class=o>}</span>
+    <span class=k>this</span><span class=o>.</span><span class=na>setEnablePrimingConnections</span><span class=o>(</span><span class=n>primeConnection</span><span class=o>);</span>
+    <span class=n>LOGGER</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;DynamicServerListLoadBalancer for client {} initialized: {}&#34;</span><span class=o>,</span> <span class=n>clientConfig</span><span class=o>.</span><span class=na>getClientName</span><span class=o>(),</span> <span class=k>this</span><span class=o>.</span><span class=na>toString</span><span class=o>());</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面源码中的 <code>updateListOfServers()</code> 最终是通过 serverListImpl.getUpdatedListOfServers() 来获取所有的服务列表的：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// DynamicServerListLoadBalancer.java
+</span><span class=c1></span><span class=nd>@VisibleForTesting</span>
+<span class=kd>public</span> <span class=kt>void</span> <span class=nf>updateListOfServers</span><span class=o>()</span> <span class=o>{</span>
+    <span class=n>List</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>servers</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;();</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>serverListImpl</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>servers</span> <span class=o>=</span> <span class=n>serverListImpl</span><span class=o>.</span><span class=na>getUpdatedListOfServers</span><span class=o>();</span>
+        <span class=n>LOGGER</span><span class=o>.</span><span class=na>debug</span><span class=o>(</span><span class=s>&#34;List of Servers for {} obtained from Discovery client: {}&#34;</span><span class=o>,</span> 
+                     <span class=n>getIdentifier</span><span class=o>(),</span> <span class=n>servers</span><span class=o>);</span>
+        <span class=k>if</span> <span class=o>(</span><span class=n>filter</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+            <span class=c1>// 如果配置了过滤器，则将符合条件的 server 筛选出来
+</span><span class=c1></span>            <span class=n>servers</span> <span class=o>=</span> <span class=n>filter</span><span class=o>.</span><span class=na>getFilteredListOfServers</span><span class=o>(</span><span class=n>servers</span><span class=o>);</span>
+            <span class=n>LOGGER</span><span class=o>.</span><span class=na>debug</span><span class=o>(</span><span class=s>&#34;Filtered List of Servers for {} obtained from Discovery client: {}&#34;</span><span class=o>,</span> <span class=n>getIdentifier</span><span class=o>(),</span> <span class=n>servers</span><span class=o>);</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+    <span class=n>updateAllServerList</span><span class=o>(</span><span class=n>servers</span><span class=o>);</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 serverListImpl 是 ServerList 的实现类 - DiscoveryEnabledNIWSServerList。而 <code>getUpdatedListOfServers()</code> 的具体实现为：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// DiscoveryEnabledNIWSServerList.java
+</span><span class=c1></span><span class=nd>@Override</span>
+<span class=kd>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>DiscoveryEnabledServer</span><span class=o>&gt;</span> <span class=nf>getInitialListOfServers</span><span class=o>()</span> <span class=o>{</span>
+    <span class=k>return</span> <span class=n>obtainServersViaDiscovery</span><span class=o>();</span>
+<span class=o>}</span>
+<span class=kd>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>DiscoveryEnabledServer</span><span class=o>&gt;</span> <span class=nf>getUpdatedListOfServers</span><span class=o>()</span> <span class=o>{</span>
+    <span class=k>return</span> <span class=n>obtainServersViaDiscovery</span><span class=o>();</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=obtainserversviadiscovery>obtainServersViaDiscovery</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// DiscoveryEnabledNIWSServerList.java
+</span><span class=c1></span><span class=kd>private</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>DiscoveryEnabledServer</span><span class=o>&gt;</span> <span class=nf>obtainServersViaDiscovery</span><span class=o>()</span> <span class=o>{</span>
+    <span class=n>List</span><span class=o>&lt;</span><span class=n>DiscoveryEnabledServer</span><span class=o>&gt;</span> <span class=n>serverList</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;</span><span class=n>DiscoveryEnabledServer</span><span class=o>&gt;();</span>
+
+    <span class=k>if</span> <span class=o>(</span><span class=n>eurekaClientProvider</span> <span class=o>==</span> <span class=kc>null</span> <span class=o>||</span> <span class=n>eurekaClientProvider</span><span class=o>.</span><span class=na>get</span><span class=o>()</span> <span class=o>==</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>logger</span><span class=o>.</span><span class=na>warn</span><span class=o>(</span><span class=s>&#34;EurekaClient has not been initialized yet, returning an empty list&#34;</span><span class=o>);</span>
+        <span class=k>return</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;</span><span class=n>DiscoveryEnabledServer</span><span class=o>&gt;();</span>
+    <span class=o>}</span>
+
+    <span class=n>EurekaClient</span> <span class=n>eurekaClient</span> <span class=o>=</span> <span class=n>eurekaClientProvider</span><span class=o>.</span><span class=na>get</span><span class=o>();</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>vipAddresses</span><span class=o>!=</span><span class=kc>null</span><span class=o>){</span>
+        <span class=k>for</span> <span class=o>(</span><span class=n>String</span> <span class=n>vipAddress</span> <span class=o>:</span> <span class=n>vipAddresses</span><span class=o>.</span><span class=na>split</span><span class=o>(</span><span class=s>&#34;,&#34;</span><span class=o>))</span> <span class=o>{</span>
+            <span class=c1>// if targetRegion is null, it will be interpreted as the same region of client
+</span><span class=c1></span>            <span class=n>List</span><span class=o>&lt;</span><span class=n>InstanceInfo</span><span class=o>&gt;</span> <span class=n>listOfInstanceInfo</span> <span class=o>=</span> <span class=n>eurekaClient</span><span class=o>.</span><span class=na>getInstancesByVipAddress</span><span class=o>(</span><span class=n>vipAddress</span><span class=o>,</span> <span class=n>isSecure</span><span class=o>,</span> <span class=n>targetRegion</span><span class=o>);</span>
+            <span class=k>for</span> <span class=o>(</span><span class=n>InstanceInfo</span> <span class=n>ii</span> <span class=o>:</span> <span class=n>listOfInstanceInfo</span><span class=o>)</span> <span class=o>{</span>
+                <span class=k>if</span> <span class=o>(</span><span class=n>ii</span><span class=o>.</span><span class=na>getStatus</span><span class=o>().</span><span class=na>equals</span><span class=o>(</span><span class=n>InstanceStatus</span><span class=o>.</span><span class=na>UP</span><span class=o>))</span> <span class=o>{</span>
+
+                    <span class=k>if</span><span class=o>(</span><span class=n>shouldUseOverridePort</span><span class=o>){</span>
+                        <span class=k>if</span><span class=o>(</span><span class=n>logger</span><span class=o>.</span><span class=na>isDebugEnabled</span><span class=o>()){</span>
+                            <span class=n>logger</span><span class=o>.</span><span class=na>debug</span><span class=o>(</span><span class=s>&#34;Overriding port on client name: &#34;</span> <span class=o>+</span> <span class=n>clientName</span> <span class=o>+</span> <span class=s>&#34; to &#34;</span> <span class=o>+</span> <span class=n>overridePort</span><span class=o>);</span>
+                        <span class=o>}</span>
+
+                        <span class=c1>// copy is necessary since the InstanceInfo builder just uses the original reference,
+</span><span class=c1></span>                        <span class=c1>// and we don&#39;t want to corrupt the global eureka copy of the object which may be
+</span><span class=c1></span>                        <span class=c1>// used by other clients in our system
+</span><span class=c1></span>                        <span class=n>InstanceInfo</span> <span class=n>copy</span> <span class=o>=</span> <span class=k>new</span> <span class=n>InstanceInfo</span><span class=o>(</span><span class=n>ii</span><span class=o>);</span>
+
+                        <span class=k>if</span><span class=o>(</span><span class=n>isSecure</span><span class=o>){</span>
+                            <span class=n>ii</span> <span class=o>=</span> <span class=k>new</span> <span class=n>InstanceInfo</span><span class=o>.</span><span class=na>Builder</span><span class=o>(</span><span class=n>copy</span><span class=o>).</span><span class=na>setSecurePort</span><span class=o>(</span><span class=n>overridePort</span><span class=o>).</span><span class=na>build</span><span class=o>();</span>
+                        <span class=o>}</span><span class=k>else</span><span class=o>{</span>
+                            <span class=n>ii</span> <span class=o>=</span> <span class=k>new</span> <span class=n>InstanceInfo</span><span class=o>.</span><span class=na>Builder</span><span class=o>(</span><span class=n>copy</span><span class=o>).</span><span class=na>setPort</span><span class=o>(</span><span class=n>overridePort</span><span class=o>).</span><span class=na>build</span><span class=o>();</span>
+                        <span class=o>}</span>
+                    <span class=o>}</span>
+
+                    <span class=n>DiscoveryEnabledServer</span> <span class=n>des</span> <span class=o>=</span> <span class=k>new</span> <span class=n>DiscoveryEnabledServer</span><span class=o>(</span><span class=n>ii</span><span class=o>,</span> <span class=n>isSecure</span><span class=o>,</span> <span class=n>shouldUseIpAddr</span><span class=o>);</span>
+                    <span class=n>des</span><span class=o>.</span><span class=na>setZone</span><span class=o>(</span><span class=n>DiscoveryClient</span><span class=o>.</span><span class=na>getZone</span><span class=o>(</span><span class=n>ii</span><span class=o>));</span>
+                    <span class=n>serverList</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>des</span><span class=o>);</span>
+                <span class=o>}</span>
+            <span class=o>}</span>
+            <span class=k>if</span> <span class=o>(</span><span class=n>serverList</span><span class=o>.</span><span class=na>size</span><span class=o>()&gt;</span><span class=n>0</span> <span class=o>&amp;&amp;</span> <span class=n>prioritizeVipAddressBasedServers</span><span class=o>){</span>
+                <span class=k>break</span><span class=o>;</span> <span class=c1>// if the current vipAddress has servers, we dont use subsequent vipAddress based servers
+</span><span class=c1></span>            <span class=o>}</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+    <span class=k>return</span> <span class=n>serverList</span><span class=o>;</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>看到这里，可以知道负载均衡器 Ribbon 是通过 Eureka Client 来获取注册列表信息，然后通过配置的路由规则 IRule 来路由。但是它从 Eureka Client 获取注册信息的时间间隔是多久呢？</p>
+<h3 id=定时任务更新服务器列表和状态>定时任务更新服务器列表和状态</h3>
+<p>在构造 DynamicServerListLoadBalancer 的构造方法中的第一行是调用父类中的 <code>initWithNiwsConfig</code> 方法。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// DynamicServerListLoadBalancer.java
+</span><span class=c1></span><span class=kd>public</span> <span class=nf>initWithNiwsConfig</span><span class=o>(</span><span class=n>IClientConfig</span> <span class=n>clientConfig</span><span class=o>)</span> <span class=o>{</span>
+    <span class=k>try</span> <span class=o>{</span>
+        <span class=kd>super</span><span class=o>.</span><span class=na>initWithNiwsConfig</span><span class=o>(</span><span class=n>clientConfig</span><span class=o>);</span>
+    <span class=o>}</span>
+    <span class=c1>// ...
+</span><span class=c1></span><span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>于是我们跟踪到 BaseLoadBalancer 的 initWithNiwsConfig 方法中：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// BaseLoadBalancer.java
+</span><span class=c1></span><span class=nd>@Override</span>
+<span class=kd>public</span> <span class=kt>void</span> <span class=nf>initWithNiwsConfig</span><span class=o>(</span><span class=n>IClientConfig</span> <span class=n>clientConfig</span><span class=o>)</span> <span class=o>{</span>
+    <span class=k>try</span> <span class=o>{</span>
+        <span class=n>initWithNiwsConfig</span><span class=o>(</span><span class=n>clientConfig</span><span class=o>,</span> <span class=n>ClientFactory</span><span class=o>::</span><span class=n>instantiateInstanceWithClientConfig</span><span class=o>);</span>
+    <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>throw</span> <span class=k>new</span> <span class=n>RuntimeException</span><span class=o>(</span><span class=s>&#34;Error initializing load balancer&#34;</span><span class=o>,</span> <span class=n>e</span><span class=o>);</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+<span class=nd>@Override</span>
+<span class=kd>public</span> <span class=kt>void</span> <span class=nf>initWithNiwsConfig</span><span class=o>(</span><span class=n>IClientConfig</span> <span class=n>clientConfig</span><span class=o>,</span> <span class=n>Factory</span> <span class=n>factory</span><span class=o>)</span> <span class=o>{</span>
+    <span class=n>S</span><span class=c1>// ...
+</span><span class=c1></span>    <span class=k>try</span> <span class=o>{</span>
+        <span class=c1>// ...
+</span><span class=c1></span>        <span class=n>initWithConfig</span><span class=o>(</span><span class=n>clientConfig</span><span class=o>,</span> <span class=n>rule</span><span class=o>,</span> <span class=n>ping</span><span class=o>,</span> <span class=n>stats</span><span class=o>);</span>
+    <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>throw</span> <span class=k>new</span> <span class=n>RuntimeException</span><span class=o>(</span><span class=s>&#34;Error initializing load balancer&#34;</span><span class=o>,</span> <span class=n>e</span><span class=o>);</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+
+<span class=kt>void</span> <span class=nf>initWithConfig</span><span class=o>(</span><span class=n>IClientConfig</span> <span class=n>clientConfig</span><span class=o>,</span> <span class=n>IRule</span> <span class=n>rule</span><span class=o>,</span> <span class=n>IPing</span> <span class=n>ping</span><span class=o>,</span> <span class=n>LoadBalancerStats</span> <span class=n>stats</span><span class=o>)</span> <span class=o>{</span>
+    <span class=c1>// ...
+</span><span class=c1></span>
+    <span class=n>setPingInterval</span><span class=o>(</span><span class=n>pingIntervalTime</span><span class=o>);</span>
+    <span class=n>setMaxTotalPingTime</span><span class=o>(</span><span class=n>maxTotalPingTime</span><span class=o>);</span>
+
+    <span class=c1>// cross associate with each other
+</span><span class=c1></span>    <span class=c1>// i.e. Rule,Ping meet your container LB
+</span><span class=c1></span>    <span class=c1>// LB, these are your Ping and Rule guys ...
+</span><span class=c1></span>    <span class=n>setRule</span><span class=o>(</span><span class=n>rule</span><span class=o>);</span>
+    <span class=n>setPing</span><span class=o>(</span><span class=n>ping</span><span class=o>);</span>
+
+    <span class=c1>// ...
+</span><span class=c1></span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>以上只保留了关键代码。调用到 initWithConfig 方法中，会执行 <code>setPingInterval(pingIntervalTime)</code> 方法。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kt>void</span> <span class=nf>setPingInterval</span><span class=o>(</span><span class=kt>int</span> <span class=n>pingIntervalSeconds</span><span class=o>)</span> <span class=o>{</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>pingIntervalSeconds</span> <span class=o>&lt;</span> <span class=n>1</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>return</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=k>this</span><span class=o>.</span><span class=na>pingIntervalSeconds</span> <span class=o>=</span> <span class=n>pingIntervalSeconds</span><span class=o>;</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>logger</span><span class=o>.</span><span class=na>isDebugEnabled</span><span class=o>())</span> <span class=o>{</span>
+        <span class=n>logger</span><span class=o>.</span><span class=na>debug</span><span class=o>(</span><span class=s>&#34;LoadBalancer [{}]:  pingIntervalSeconds set to {}&#34;</span><span class=o>,</span>
+            <span class=n>name</span><span class=o>,</span> <span class=k>this</span><span class=o>.</span><span class=na>pingIntervalSeconds</span><span class=o>);</span>
+    <span class=o>}</span>
+    <span class=n>setupPingTask</span><span class=o>();</span> <span class=c1>// since ping data changed
+</span><span class=c1></span><span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中开启了一个定时任务：<code>setupPingTask()</code> 。在该方法内部使用 ShutdownEnabledTimer 初始化了一个定时器，并且设置每10秒调用 PingTask 任务。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// BaseLoadBalancer.java
+</span><span class=c1>// 定时任务
+</span><span class=c1></span><span class=kt>void</span> <span class=nf>setupPingTask</span><span class=o>()</span> <span class=o>{</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>canSkipPing</span><span class=o>())</span> <span class=o>{</span>
+        <span class=k>return</span><span class=o>;</span>
+    <span class=o>}</span>
+    <span class=k>if</span> <span class=o>(</span><span class=n>lbTimer</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>lbTimer</span><span class=o>.</span><span class=na>cancel</span><span class=o>();</span>
+    <span class=o>}</span>
+    <span class=n>lbTimer</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ShutdownEnabledTimer</span><span class=o>(</span><span class=s>&#34;NFLoadBalancer-PingTimer-&#34;</span> <span class=o>+</span> <span class=n>name</span><span class=o>,</span>
+            <span class=kc>true</span><span class=o>);</span>
+    <span class=n>lbTimer</span><span class=o>.</span><span class=na>schedule</span><span class=o>(</span><span class=k>new</span> <span class=n>PingTask</span><span class=o>(),</span> <span class=n>0</span><span class=o>,</span> <span class=n>pingIntervalSeconds</span> <span class=o>*</span> <span class=n>1000</span><span class=o>);</span> <span class=c1>// 默认10秒执行一次
+</span><span class=c1></span>    <span class=n>forceQuickPing</span><span class=o>();</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>PingTask 是 BaseLoadBalancer 的内部类，根据 IPingStrategy 策略来发送 ping 请求获取和更新服务器列表，默认策略是 SerialPingStrategy。在 PingTask 的 run 方法中，执行了另一个内部类 Pinger 的 runPinger 方法。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span><span class=lnt>86
+</span><span class=lnt>87
+</span><span class=lnt>88
+</span><span class=lnt>89
+</span><span class=lnt>90
+</span><span class=lnt>91
+</span><span class=lnt>92
+</span><span class=lnt>93
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=c1>// BaseLoadBalancer.java
+</span><span class=c1>// 内部类 PingTask
+</span><span class=c1></span><span class=kd>class</span> <span class=nc>PingTask</span> <span class=kd>extends</span> <span class=n>TimerTask</span> <span class=o>{</span>
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>run</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>try</span> <span class=o>{</span>
+            <span class=k>new</span> <span class=n>Pinger</span><span class=o>(</span><span class=n>pingStrategy</span><span class=o>).</span><span class=na>runPinger</span><span class=o>();</span>
+        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+            <span class=n>logger</span><span class=o>.</span><span class=na>error</span><span class=o>(</span><span class=s>&#34;LoadBalancer [{}]: Error pinging&#34;</span><span class=o>,</span> <span class=n>name</span><span class=o>,</span> <span class=n>e</span><span class=o>);</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+<span class=c1>// 内部类 Pinger
+</span><span class=c1></span><span class=kd>class</span> <span class=nc>Pinger</span> <span class=o>{</span>
+
+    <span class=kd>private</span> <span class=kd>final</span> <span class=n>IPingStrategy</span> <span class=n>pingerStrategy</span><span class=o>;</span>
+
+    <span class=kd>public</span> <span class=nf>Pinger</span><span class=o>(</span><span class=n>IPingStrategy</span> <span class=n>pingerStrategy</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>pingerStrategy</span> <span class=o>=</span> <span class=n>pingerStrategy</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>runPinger</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
+        <span class=c1>// 用 CAS 设置 pingInProgress 为 true，代表正在执行 Ping 任务。
+</span><span class=c1></span>        <span class=c1>// 如果设置失败，则表示有线程正在执行 Ping 任务，这里就不再执行
+</span><span class=c1></span>        <span class=k>if</span> <span class=o>(!</span><span class=n>pingInProgress</span><span class=o>.</span><span class=na>compareAndSet</span><span class=o>(</span><span class=kc>false</span><span class=o>,</span> <span class=kc>true</span><span class=o>))</span> <span class=o>{</span> 
+            <span class=k>return</span><span class=o>;</span> <span class=c1>// Ping in progress - nothing to do
+</span><span class=c1></span>        <span class=o>}</span>
+
+        <span class=c1>// we are &#34;in&#34; - we get to Ping
+</span><span class=c1></span>
+        <span class=n>Server</span><span class=o>[]</span> <span class=n>allServers</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+        <span class=kt>boolean</span><span class=o>[]</span> <span class=n>results</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+
+        <span class=n>Lock</span> <span class=n>allLock</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+        <span class=n>Lock</span> <span class=n>upLock</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+
+        <span class=k>try</span> <span class=o>{</span>
+            <span class=cm>/*
+</span><span class=cm>             * The readLock should be free unless an addServer operation is
+</span><span class=cm>             * going on...
+</span><span class=cm>             */</span>
+            <span class=c1>// 读锁应该是空闲状态，除了 addServer 操作正在执行。
+</span><span class=c1></span>            <span class=n>allLock</span> <span class=o>=</span> <span class=n>allServerLock</span><span class=o>.</span><span class=na>readLock</span><span class=o>();</span>
+            <span class=c1>// 加读锁，避免其他线程修改 serverList
+</span><span class=c1></span>            <span class=n>allLock</span><span class=o>.</span><span class=na>lock</span><span class=o>();</span>
+            <span class=n>allServers</span> <span class=o>=</span> <span class=n>allServerList</span><span class=o>.</span><span class=na>toArray</span><span class=o>(</span><span class=k>new</span> <span class=n>Server</span><span class=o>[</span><span class=n>allServerList</span><span class=o>.</span><span class=na>size</span><span class=o>()]);</span>
+            <span class=c1>// 解锁
+</span><span class=c1></span>            <span class=n>allLock</span><span class=o>.</span><span class=na>unlock</span><span class=o>();</span>
+
+            <span class=kt>int</span> <span class=n>numCandidates</span> <span class=o>=</span> <span class=n>allServers</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
+            <span class=c1>// 向每个服务器发送 ping 请求，得到一个布尔值的结果集（服务器是否存活 - 能否请求成功）
+</span><span class=c1></span>            <span class=n>results</span> <span class=o>=</span> <span class=n>pingerStrategy</span><span class=o>.</span><span class=na>pingServers</span><span class=o>(</span><span class=n>ping</span><span class=o>,</span> <span class=n>allServers</span><span class=o>);</span>
+
+            <span class=kd>final</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>Server</span><span class=o>&gt;</span> <span class=n>newUpList</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;</span><span class=n>Server</span><span class=o>&gt;();</span>
+            <span class=kd>final</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>Server</span><span class=o>&gt;</span> <span class=n>changedServers</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;</span><span class=n>Server</span><span class=o>&gt;();</span>
+
+            <span class=c1>// 遍历当前所有Server
+</span><span class=c1></span>            <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>numCandidates</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
+                <span class=c1>// 获取第 i 个 Server 是当前否为存活状态（UP）
+</span><span class=c1></span>                <span class=kt>boolean</span> <span class=n>isAlive</span> <span class=o>=</span> <span class=n>results</span><span class=o>[</span><span class=n>i</span><span class=o>];</span>
+                <span class=n>Server</span> <span class=n>svr</span> <span class=o>=</span> <span class=n>allServers</span><span class=o>[</span><span class=n>i</span><span class=o>];</span>
+                <span class=c1>// 获取 ping 之前的服务器状态
+</span><span class=c1></span>                <span class=kt>boolean</span> <span class=n>oldIsAlive</span> <span class=o>=</span> <span class=n>svr</span><span class=o>.</span><span class=na>isAlive</span><span class=o>();</span>
+
+                <span class=c1>// 将该服务器状态改为当前获取到的状态
+</span><span class=c1></span>                <span class=n>svr</span><span class=o>.</span><span class=na>setAlive</span><span class=o>(</span><span class=n>isAlive</span><span class=o>);</span>
+
+                <span class=k>if</span> <span class=o>(</span><span class=n>oldIsAlive</span> <span class=o>!=</span> <span class=n>isAlive</span><span class=o>)</span> <span class=o>{</span> <span class=c1>// 如果之前状态与当前获取的状态不一致
+</span><span class=c1></span>                    <span class=c1>// 加入到状态更改过的服务器列表中
+</span><span class=c1></span>                    <span class=n>changedServers</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>svr</span><span class=o>);</span>
+                    <span class=c1>// 输出日志：当前服务器状态修改
+</span><span class=c1></span>                    <span class=n>logger</span><span class=o>.</span><span class=na>debug</span><span class=o>(</span><span class=s>&#34;LoadBalancer [{}]:  Server [{}] status changed to {}&#34;</span><span class=o>,</span> 
+                        <span class=n>name</span><span class=o>,</span> <span class=n>svr</span><span class=o>.</span><span class=na>getId</span><span class=o>(),</span> <span class=o>(</span><span class=n>isAlive</span> <span class=o>?</span> <span class=s>&#34;ALIVE&#34;</span> <span class=o>:</span> <span class=s>&#34;DEAD&#34;</span><span class=o>));</span>
+                <span class=o>}</span>
+
+                <span class=k>if</span> <span class=o>(</span><span class=n>isAlive</span><span class=o>)</span> <span class=o>{</span>
+                    <span class=c1>// 如果获取到的当前状态为 true（存活UP状态）
+</span><span class=c1></span>                    <span class=c1>// 则将该服务器加入到 newUpList 中，用于后面更新至存活服务器列表
+</span><span class=c1></span>                    <span class=n>newUpList</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>svr</span><span class=o>);</span>
+                <span class=o>}</span>
+            <span class=o>}</span>
+            <span class=c1>// 更新存活服务器列表，需要加写锁，避免并发问题
+</span><span class=c1></span>            <span class=n>upLock</span> <span class=o>=</span> <span class=n>upServerLock</span><span class=o>.</span><span class=na>writeLock</span><span class=o>();</span>
+            <span class=n>upLock</span><span class=o>.</span><span class=na>lock</span><span class=o>();</span>
+            <span class=n>upServerList</span> <span class=o>=</span> <span class=n>newUpList</span><span class=o>;</span>
+            <span class=n>upLock</span><span class=o>.</span><span class=na>unlock</span><span class=o>();</span>
+
+            <span class=c1>// 通知服务器状态修改
+</span><span class=c1></span>            <span class=n>notifyServerStatusChangeListener</span><span class=o>(</span><span class=n>changedServers</span><span class=o>);</span>
+        <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
+            <span class=n>pingInProgress</span><span class=o>.</span><span class=na>set</span><span class=o>(</span><span class=kc>false</span><span class=o>);</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该定时任务的大致流程为：</p>
+<p>1、首先将用 CAS 来修改 pingInProgress （AtomicBoolean 对象），如果修改不成功，则表示当前有其他线程正在发送 ping 请求，并且还没有执行完毕，所以当前操作可以不再执行。</p>
+<p>2、加读锁获取当前服务列表。</p>
+<p>3、通过 IPingStrategy 向每个服务器发送 ping 请求，得到一个布尔值的结果集。</p>
+<p>3、遍历之前获取到的 Server List，判断服务状态是否有变化，并更新服务列表。（其中状态更改的服务器将会加入到 changedServers 列表中，ping 请求后依然存活的服务会加入到 newUpList 中）</p>
+<p>4、最后加写锁更新 UP 状态的服务器列表，并<strong>通知服务状态改变</strong>。(有兴趣的话，此处可以查看一下ServerStatusChangeListener 的实现类是哪个，再看具体做了什么操作)</p>
+<p>5、全部执行完成后，将 pingInProgress 改为 false。</p>
+<h2 id=总结>总结</h2>
+<p>由此可见，Ribbon的负载均衡，主要是通过 LoadBalancerClient 来实现的，而 Load’BalancerClient 又将具体实现交给了 ILoadBalancer 来处理，ILoadBalancer 通过配置 IRule、IPing 等信息，向 Eureka 获取服务注册列表，并且在初始化时开启一个定时任务，10s 一次向 EurekaClient 发送 ping 请求，来判断服务的可用性，如果服务的可用性发生改变或者服务数量与之前的不一致，则更新当前服务器列表或重新拉取。最后 ILoadBalancer 获取到这些服务列表之后，便可以根据 IRule 来进行负载均衡。</p>
+<p>而 RestTemplate 被 @LoadBalanced 注解后，能够实现负载均衡，主要是通过给 RestTemplate 添加拦截器，在请求前通过拦截器（负载均衡）获取到真正的请求地址，最后进行服务调用。</p>
+<h2 id=ref>Ref</h2>
+<p><a href=https://github.com/Netflix/ribbon.git target=_blank rel="noopener noreffer">Ribbon 源码</a></p>
+<p><a href=https://github.com/spring-cloud/spring-cloud-commons.git target=_blank rel="noopener noreffer">Spring Cloud Commons 源码</a></p>
+<p><a href=https://github.com/spring-cloud/spring-cloud-netflix.git target=_blank rel="noopener noreffer">Spring Cloud Netflix 源码</a></p>
+<p><a href=https://cloud.spring.io/spring-cloud-static/spring-cloud-netflix/2.1.3.RELEASE/single/spring-cloud-netflix.html#spring-cloud-ribbon target=_blank rel="noopener noreffer">Spring Cloud Netflix Ribbon 官方文档</a></p>
+<p><a href=https://github.com/aCoder2013/blog/issues/29 target=_blank rel="noopener noreffer">Spring Cloud Ribbon踩坑记录及原理解析</a></p>
+<p><a href=http://www.spring4all.com/article/230 target=_blank rel="noopener noreffer">Ribbon原理分析 - Spring For All</a></p>
+<p>来源: Java Stack
+文章作者: Ryan
+文章链接: <a href=https://403unauthorized.github.io/deep-in-ribbon/ target=_blank rel="noopener noreffer">https://403unauthorized.github.io/deep-in-ribbon/</a>
+本文章著作权归作者所有，任何形式的转载都请注明出处。</p>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2021-10-03&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/5539ee676150a2b5e8e0ed4a06a0b8a5b5abc58a target=_blank title="commit by Yongqi Lei(leiyongqi1026@gmail.com) 5539ee676150a2b5e8e0ed4a06a0b8a5b5abc58a: New articles">
+<i class="fas fa-hashtag fa-fw"></i>5539ee6</a></span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="分享到 Linkedin" data-sharer=linkedin data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/ data-title="Spring Cloud Ribbon" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/><i class="fab fa-reddit fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/ data-title="Spring Cloud Ribbon"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/ data-title="Spring Cloud Ribbon"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 人人" data-sharer=renren data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/><i class="fab fa-renren fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/ data-title="Spring Cloud Ribbon"><i data-svg-src=/lib/simple-icons/icons/baidu.min.svg></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/ data-title="Spring Cloud Ribbon"><i class="fab fa-evernote fa-fw"></i></a><a href=javascript:void(0); title="分享到 Skype" data-sharer=skype data-url=http://403unauthorized.github.io/zh-cn/2021/10/spring-cloud-ribbon/ data-title="Spring Cloud Ribbon"><i class="fab fa-skype fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/zh-cn/tags/spring-cloud/>Spring Cloud</a>,&nbsp;<a href=/zh-cn/tags/java/>Java</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/zh-cn/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/zh-cn/2021/10/java-synchronized/ class=prev rel=prev title="Synchronized 关键字"><i class="fas fa-angle-left fa-fw"></i>Synchronized 关键字</a></div>
+</div>
+<div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="fa fa-theater-masks"></i> </div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/zh-cn/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/katex/katex.min.4710034e669c7ff17f823f9ba12cf8a36582d65b007f79cbc4a3c11d7db2e4ca.css integrity="sha256-RxADTmacf/F/gj+boSz4o2WC1lsAf3nLxKPBHX2y5Mo="><link rel=stylesheet href=/lib/katex/copy-tex.min.bf9ff4137fec38f6255419e142d0883c9c52090885d746f80eee12b273d9b3e0.css integrity="sha256-v5/0E3/sOPYlVBnhQtCIPJxSCQiF10b4Du4SsnPZs+A="><script type=text/javascript src=https://torres-blog.disqus.com/embed.js defer></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript src=/lib/sharer/sharer.min.9c88f86c7f0820287113f6236200459832693656e80d7556cc80a93dfbd45813.js integrity="sha256-nIj4bH8IIChxE/YjYgBFmDJpNlboDXVWzICpPfvUWBM="></script><script type=text/javascript src=/lib/typeit/typeit.min.491c13689db70b6adb3176a9a792644be7578a2f931521f5cb199d313a21c359.js integrity="sha256-SRwTaJ23C2rbMXapp5JkS+dXii+TFSH1yxmdMTohw1k="></script><script type=text/javascript src=/lib/katex/katex.min.17f5dd6b9f123dd7140abfb18521b3f4c036cd004f6f40121182a8865f140877.js integrity="sha256-F/Xda58SPdcUCr+xhSGz9MA2zQBPb0ASEYKohl8UCHc="></script><script type=text/javascript src=/lib/katex/auto-render.min.f74776a677f0d2be0af0264058f928e2ba455d0b19bc985304660d922a43a6b2.js integrity="sha256-90d2pnfw0r4K8CZAWPko4rpFXQsZvJhTBGYNkipDprI="></script><script type=text/javascript src=/lib/katex/copy-tex.min.2ab2237329021bc443986c8327f6e61357fb68a54e5d233d224023718c02207d.js integrity="sha256-KrIjcykCG8RDmGyDJ/bmE1f7aKVOXSM9IkAjcYwCIH0="></script><script type=text/javascript src=/lib/katex/mhchem.min.5cea356d6025c5a2f18c454c83ec5674dbb04fab1cd1d75569e77788c6b6f888.js integrity="sha256-XOo1bWAlxaLxjEVMg+xWdNuwT6sc0ddVaed3iMa2+Ig="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:10},comment:{},data:{"id-1":"Torres","id-2":"Torres"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/zh-cn/index.json",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"lunr"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>
