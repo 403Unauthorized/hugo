@@ -1,4 +1,4 @@
-baseURL = 'http://403unauthorized.github.io/hugo'
+baseURL = 'http://403unauthorized.github.io/'
 defaultContentLanguage = 'en'
 title = "Torres' Blog"
 hasCJKLanguage = true

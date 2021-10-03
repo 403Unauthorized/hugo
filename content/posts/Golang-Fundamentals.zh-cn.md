@@ -12,8 +12,8 @@ share:
   enable: true
 comment:
   enable: true
-featuredImagePreview: "/hugo/images/posts/golang-fundamentals/golang-fundamentals.png"
-featuredImage: "/hugo/images/posts/golang-fundamentals/golang-fundamentals.png"
+featuredImagePreview: "/images/posts/golang-fundamentals/golang-fundamentals.png"
+featuredImage: "/images/posts/golang-fundamentals/golang-fundamentals.png"
 ---
 
 ## Hello Golang

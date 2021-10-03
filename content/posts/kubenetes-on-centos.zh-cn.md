@@ -12,8 +12,8 @@ share:
   enable: true
 comment:
   enable: true
-featuredImagePreview: "/hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png"
-featuredImage: "/hugo/images/posts/kubernetes-on-centos/kubernetes-on-centos.png"
+featuredImagePreview: "/images/posts/kubernetes-on-centos/kubernetes-on-centos.png"
+featuredImage: "/images/posts/kubernetes-on-centos/kubernetes-on-centos.png"
 ---
 
 ## 前提条件
