@@ -12,6 +12,8 @@ share:
   enable: true
 comment:
   enable: true
+featuredImage: "/images/posts/common/java_cover.png"
+featuredImagePreview: "/images/posts/common/java_cover.png"
 ---
 
 volatile 应该经常听说或者用到的。它在并发编程中起到了什么作用呢？

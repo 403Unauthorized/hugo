@@ -12,6 +12,8 @@ share:
   enable: true
 comment:
   enable: true
+featuredImage: "/images/posts/java-garbage-collection/java_gc_cover.png"
+featuredImagePreview: "/images/posts/java-garbage-collection/java_gc_cover.png"
 ---
 
 关于 Java 回收的文章大同小异，我将我查阅的各种资料整合了一下，取文章中写的好的部分以及自我总结，写出这篇文章。

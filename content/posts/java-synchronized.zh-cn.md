@@ -12,6 +12,8 @@ share:
   enable: true
 comment:
   enable: true
+featuredImage: "/images/posts/common/java_cover.png"
+featuredImagePreview: "/images/posts/common/java_cover.png"
 ---
 
 我们在学习 Java 并发编程的时候，看到的最多的就是 synchronized 关键字了，它可以解决很多线程安全问题，随着深入学习，我们知道 synchronized 是一个重量级锁，效率相对于 Lock 来说并不是那么好。但是经过 Java 几个版本的优化之后，synchronized 并不显得那么笨重了。下面我们来看一下 synchronized 的实现机制，和 Java 对它进行了什么样的升级。
