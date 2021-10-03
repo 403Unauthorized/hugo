@@ -36,6 +36,14 @@ enableGitInfo = true
       url = "/categories/"
       title = ""
       weight = 3
+    [[languages.en.menu.main]]
+      identifier = "about"
+      pre = ""
+      post = ""
+      name = "About"
+      url = "/about/"
+      title = ""
+      weight = 4
 
   [languages.zh-cn]
     weight = 2
@@ -69,6 +77,14 @@ enableGitInfo = true
       url = "/categories/"
       title = ""
       weight = 3
+    [[languages.zh-cn.menu.main]]
+      identifier = "about"
+      pre = ""
+      post = ""
+      name = "关于我"
+      url = "/about/"
+      title = ""
+      weight = 4
 
 [params]
   # LoveIt 主题版本
