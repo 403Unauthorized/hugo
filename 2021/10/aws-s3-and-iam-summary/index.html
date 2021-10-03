@@ -1,0 +1,320 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Aws S3 and Iam Summary - Torres' Tech Blog</title><meta name=Description content="记录我的学习之路"><meta property="og:title" content="Aws S3 and Iam Summary">
+<meta property="og:description" content="IAM - Identity Access Management IAM consists of the followings: Users Groups Roles Policies We can use follow json data to custom policies: 1 2 3 4 5 6 7 8 9 10 { &#34;Version&#34;: &#34;2020-03-14&#34;, &#34;Statement&#34;: [ { &#34;Effect&#34;: &#34;Allow&#34;, &#34;Action&#34;: &#34;*&#34;, &#34;Resource&#34;: &#34;*&#34; } ] } IAM Knowledge Point IAM is universal. Does not apply to regions at this time The “root ac">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/"><meta property="og:image" content="http://403unauthorized.github.io/logo.ico"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-03T09:21:59+09:00">
+<meta property="article:modified_time" content="2021-10-03T11:17:31+09:00"><meta property="og:site_name" content="Torres' Tech Blog">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://403unauthorized.github.io/logo.ico">
+<meta name=twitter:title content="Aws S3 and Iam Summary">
+<meta name=twitter:description content="IAM - Identity Access Management IAM consists of the followings: Users Groups Roles Policies We can use follow json data to custom policies: 1 2 3 4 5 6 7 8 9 10 { &#34;Version&#34;: &#34;2020-03-14&#34;, &#34;Statement&#34;: [ { &#34;Effect&#34;: &#34;Allow&#34;, &#34;Action&#34;: &#34;*&#34;, &#34;Resource&#34;: &#34;*&#34; } ] } IAM Knowledge Point IAM is universal. Does not apply to regions at this time The “root ac">
+<meta name=application-name content="Torres' Blog">
+<meta name=apple-mobile-web-app-title content="Torres' Blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/><link rel=prev href=http://403unauthorized.github.io/2021/10/athena-and-macie/><link rel=stylesheet href=/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Aws S3 and Iam Summary","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/2021\/10\/aws-s3-and-iam-summary\/"},"genre":"posts","keywords":"S3, IAM","wordcount":1266,"url":"http:\/\/403unauthorized.github.io\/2021\/10\/aws-s3-and-iam-summary\/","datePublished":"2021-10-03T09:21:59+09:00","dateModified":"2021-10-03T11:17:31+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Torres' Tech Blog"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/2021/10/aws-s3-and-iam-summary/ selected>English</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Torres' Tech Blog"><span class=header-title-pre><i class="fa fa-theater-masks"></i></span><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/2021/10/aws-s3-and-iam-summary/ selected>English</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Aws S3 and Iam Summary</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/ title=Author rel=" author" class=author><i class="fas fa-user-circle fa-fw"></i>Torres</a></span>&nbsp;<span class=post-category>included in <a href=/categories/aws/><i class="far fa-folder fa-fw"></i>AWS</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-10-03>2021-10-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1266 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#iam---identity-access-management>IAM - Identity Access Management</a>
+<ul>
+<li><a href=#iam-knowledge-point>IAM Knowledge Point</a></li>
+</ul>
+</li>
+<li><a href=#s3--simple-storage-service>S3- Simple Storage Service</a>
+<ul>
+<li><a href=#s3-knowledge-point>S3 Knowledge Point</a></li>
+<li><a href=#the-key-fundamentals-of-s3>The Key Fundamentals of S3</a></li>
+<li><a href=#understand-how-to-get-the-best-value-out-of-s3>Understand how to get the best value out of S3</a></li>
+<li><a href=#s3-encryption>S3 Encryption</a></li>
+<li><a href=#best-practices-with-aws-organizationsenterprise-only>Best Practices with AWS Organizations(Enterprise only)</a></li>
+<li><a href=#share-s3-buckets-across-accounts>Share S3 buckets across accounts</a></li>
+<li><a href=#cross-region-replication>Cross Region Replication</a></li>
+<li><a href=#lifecycle-policies>Lifecycle Policies</a></li>
+</ul>
+</li>
+<li><a href=#cloudfront>CloudFront</a>
+<ul>
+<li><a href=#cloudfront-knowledge-point>CloudFront Knowledge Point</a></li>
+</ul>
+</li>
+<li><a href=#storage-gateway>Storage Gateway</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><h1 id=iam---identity-access-management>IAM - Identity Access Management</h1>
+<p>IAM consists of the followings:</p>
+<ul>
+<li>Users</li>
+<li>Groups</li>
+<li>Roles</li>
+<li>Policies</li>
+</ul>
+<p>We can use follow json data to custom policies:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+  <span class=nt>&#34;Version&#34;</span><span class=p>:</span> <span class=s2>&#34;2020-03-14&#34;</span><span class=p>,</span>
+  <span class=nt>&#34;Statement&#34;</span><span class=p>:</span> <span class=p>[</span>
+    <span class=p>{</span>
+      <span class=nt>&#34;Effect&#34;</span><span class=p>:</span> <span class=s2>&#34;Allow&#34;</span><span class=p>,</span>
+      <span class=nt>&#34;Action&#34;</span><span class=p>:</span> <span class=s2>&#34;*&#34;</span><span class=p>,</span>
+      <span class=nt>&#34;Resource&#34;</span><span class=p>:</span> <span class=s2>&#34;*&#34;</span>
+    <span class=p>}</span>
+  <span class=p>]</span>
+<span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=iam-knowledge-point>IAM Knowledge Point</h2>
+<ul>
+<li>IAM is universal. Does not apply to regions at this time</li>
+<li>The “root account” is simply the account created when first setip your AWS account. It has complete Admin access.</li>
+<li>New Users have No Permissions when first created</li>
+<li>New Users are assigned <strong>Access Key ID</strong> and <strong>Access Keys</strong> when first created</li>
+<li><strong>Access Key ID</strong> and <strong>Access Keys</strong> are not same as passwords. We can not use them to login in to the AWS console. But we can use them to access AWS via then APIs nad Command Line.</li>
+<li>We can only view <strong>Access Keys</strong> once. If we lose them, we have to regenerate them.</li>
+<li>IAM requires us to setup Mutifactor Authentication on our root account</li>
+<li>We can create and customise our own password rotation policies</li>
+</ul>
+<h1 id=s3--simple-storage-service>S3- Simple Storage Service</h1>
+<h2 id=s3-knowledge-point>S3 Knowledge Point</h2>
+<ul>
+<li>S3 is <strong>Object-based</strong>, allows us to upload files.</li>
+<li>Files can be from 0 Bytes to 5 TB.</li>
+<li>unlimited storage.</li>
+<li>Files are stored is Buckets.</li>
+<li><strong>S3 is a universal namespace</strong>. So the name of buckets have to be unique globally.</li>
+<li>This is what the S3 url looks like: <a href=https://mscloudplatform.s3.amazonaws.com/ target=_blank rel="noopener noreffer">https://mscloudplatform.s3.amazonaws.com</a></li>
+<li>Not suitable to install an operation system on like EBS.</li>
+<li>Successful uploads will generate a HTTP 200 status code.</li>
+</ul>
+<p>By default, all newly created buckets are <strong>PRIVATE</strong>. We can setup access control to our buckets using:</p>
+<ul>
+<li>Bucket Policies</li>
+<li>Access Control Lists</li>
+</ul>
+<p>S3 Buckets can be configured to create access logs which log all requests made to the S3 buckets. This can be sent to another bucket and even another bucket in another account.</p>
+<h2 id=the-key-fundamentals-of-s3>The Key Fundamentals of S3</h2>
+<ul>
+<li>Key (This is simply te name of the object)</li>
+<li>Value (This is simply the data and is made up of a sequence of bytes)</li>
+<li>Version ID (Important for versioning)</li>
+<li>Metadata (Data about data you are storing)</li>
+<li>Subresources:
+<ul>
+<li>Access Control Lists</li>
+<li>Torrents</li>
+</ul>
+</li>
+<li><strong>Read after Write consistency for PUTS of new Objects</strong></li>
+<li><strong>Eventual Consistency for overwrite PUTS and DELETES (can take some time to propagate)</strong></li>
+</ul>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/aws-s3-and-iam-summary/s3_iam_1.png data-srcset="/images/posts/aws-s3-and-iam-summary/s3_iam_1.png, /images/posts/aws-s3-and-iam-summary/s3_iam_1.png 1.5x, /images/posts/aws-s3-and-iam-summary/s3_iam_1.png 2x" data-sizes=auto alt=/images/posts/aws-s3-and-iam-summary/s3_iam_1.png title="S3 Storage Level"></p>
+<p><strong>S3 Storage Level</strong></p>
+<p>There are some different level of S3 storage we can choose when we upload Objects to S3 Buckets.</p>
+<h2 id=understand-how-to-get-the-best-value-out-of-s3>Understand how to get the best value out of S3</h2>
+<p>Storage Cost (High to Low):</p>
+<ol>
+<li>S3 Standard</li>
+<li>S3 - IA (Infrequently Accessed)</li>
+<li>S3 - Intelligent Tiering</li>
+<li>S3 One Zone - IA (not recommend)</li>
+<li>S3 Glacier</li>
+<li>S3 Glacier Deep Archive</li>
+</ol>
+<h2 id=s3-encryption>S3 Encryption</h2>
+<p><strong>Encryption in Transit is achieved by:</strong></p>
+<ul>
+<li>SSL/TLS</li>
+</ul>
+<p><strong>Encryption at Rest (Server Side) is achieved by</strong></p>
+<ul>
+<li>S3 managed Keys - SSE-S3</li>
+<li>AWS Key Management Service, Managed Keys - SSE-KMS</li>
+<li>Server Side Encrytion With Customer: Provided Keys - SSE-C</li>
+</ul>
+<p><strong>Client Side Encryption</strong></p>
+<h2 id=best-practices-with-aws-organizationsenterprise-only>Best Practices with AWS Organizations(Enterprise only)</h2>
+<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/posts/aws-s3-and-iam-summary/s3_iam_2.png data-srcset="/images/posts/aws-s3-and-iam-summary/s3_iam_2.png, /images/posts/aws-s3-and-iam-summary/s3_iam_2.png 1.5x, /images/posts/aws-s3-and-iam-summary/s3_iam_2.png 2x" data-sizes=auto alt=/images/posts/aws-s3-and-iam-summary/s3_iam_2.png title="Best Practices with AWS Organizations"></p>
+<p><strong>Best Practices with AWS Organizations</strong></p>
+<h2 id=share-s3-buckets-across-accounts>Share S3 buckets across accounts</h2>
+<ul>
+<li>Using Bucket Policies & IAM (applies across the entire bucket). Programmatic Access Only (APIs 访问).</li>
+<li>Using Bucket ACLs & IAM (individual objects). Programmatic Access Only.</li>
+<li>Cross-account IAM Roles. Programmatic and Console access.</li>
+</ul>
+<h2 id=cross-region-replication>Cross Region Replication</h2>
+<ul>
+<li>Versioning must be enbaled on both the source and destination buckets.(版本控制必须要在source和target同时启用)</li>
+<li>Regions must be unique.</li>
+<li>Files in an existing bucket are not replicated automatically. (已经存在于桶的文件不会自动replicate)</li>
+<li>All subsequent updated files will be replicated automatically. (所有之后的文件上传或者更新都会自动replicate)</li>
+<li>Delete markets are not replicated. (删除标记不会replicate)</li>
+<li>Deleting individual versions or delete markers will not be replicated. (删除单独的版本或删除delete markers不会被replicate)</li>
+<li>Understand what Cross Region Replication is at a high level.</li>
+</ul>
+<h2 id=lifecycle-policies>Lifecycle Policies</h2>
+<ul>
+<li>Automates moving your objects between the different storage tiers. (可以将你的objects自动在不同的存储级别之间移动)</li>
+<li>Can be used in conjuction with versioning. (可以和版本控制结合使用)</li>
+<li>Can be applied to current versions and previous versions.(可以应用于当前版本和旧版本)</li>
+</ul>
+<h1 id=cloudfront>CloudFront</h1>
+<h2 id=cloudfront-knowledge-point>CloudFront Knowledge Point</h2>
+<ul>
+<li><strong>Edge Location</strong> - This is the location where content will be cached. This is separate to an AWS Region/AZ (content被缓存的地方，独立于AWS地区和可用区)</li>
+<li><strong>Origin</strong> - This is the origin of all the files that the CDN will distribute. This can be either an S3 Bucket, an EC2 Instance, an Elastic Load Balancer, or Route53. (这是CDN分发的所有文件资源的来源。可以是S3 Bucket，可以是一个EC2实例，也可以是ELB，或者Route53)</li>
+<li><strong>Distribution</strong> - This is the name given the CDN which consists of a collection of Edge Locations. (这是给定的由Edge Locations集合组成的CDN的名称)</li>
+<li><strong>Web Distribution</strong> - Typically used for Websites. (通常用于网站)</li>
+<li><strong>RTMP</strong> - Used for Media Streaming.</li>
+<li>Edge locations are not just <strong>READ</strong> only - you can write to them too. (Edge locations 不止是只读，我们也可以将数据写入edge location)</li>
+<li>Objects are cached for the life of the <strong>TTL</strong>(Time To Live). (对象只在TTL的生命周期中被缓存)</li>
+<li>You can clear cached objects, but you will be charged. (我们可一清楚缓存的对象，但是需要收费)</li>
+</ul>
+<h1 id=storage-gateway>Storage Gateway</h1>
+<p>There are some kinds of gateways:</p>
+<p><strong>File Gateway</strong></p>
+<ul>
+<li>For flat files, stored directly on S3</li>
+</ul>
+<p><strong>Volume Gateway</strong></p>
+<ul>
+<li><strong>Stored Volumes</strong> - Entire Dataset is stored on site and is aynchronously backed up to S3. (<strong>存储卷</strong> - 整个数据集都存储在站点上并异步备份至S3)</li>
+<li><strong>Cached Volumes</strong> - Entire Dataset is Stored on S3 and the most frequently accessed data is cached on site. (<strong>缓存卷</strong> - 整个数据集都存储在S3中，最常访问的数据被缓存在站点上)</li>
+</ul>
+<p><strong>Gateway Virtual Tape Library</strong></p>
+<ul>
+<li>USed for backup and uses popular backup applications like NetBackup, Backup Exec, Veeam etc.</li>
+</ul>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2021-10-03&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/7ce900bd7319700e052787a5b3d75ae86f913a9f target=_blank title="commit by Yongqi Lei(leiyongqi1026@gmail.com) 7ce900bd7319700e052787a5b3d75ae86f913a9f: Update tags and categories of each article">
+<i class="fas fa-hashtag fa-fw"></i>7ce900b</a></span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Linkedin" data-sharer=linkedin data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/><i class="fab fa-linkedin fa-fw"></i></a><a href=javascript:void(0); title="Share on WhatsApp" data-sharer=whatsapp data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/ data-title="Aws S3 and Iam Summary" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="Share on Reddit" data-sharer=reddit data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/><i class="fab fa-reddit fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/ data-title="Aws S3 and Iam Summary"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/ data-title="Aws S3 and Iam Summary"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="Share on 人人" data-sharer=renren data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/><i class="fab fa-renren fa-fw"></i></a><a href=javascript:void(0); title="Share on 百度" data-sharer=baidu data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/ data-title="Aws S3 and Iam Summary"><i data-svg-src=/lib/simple-icons/icons/baidu.min.svg></i></a><a href=javascript:void(0); title="Share on Evernote" data-sharer=evernote data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/ data-title="Aws S3 and Iam Summary"><i class="fab fa-evernote fa-fw"></i></a><a href=javascript:void(0); title="Share on Skype" data-sharer=skype data-url=http://403unauthorized.github.io/2021/10/aws-s3-and-iam-summary/ data-title="Aws S3 and Iam Summary"><i class="fab fa-skype fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/s3/>S3</a>,&nbsp;<a href=/tags/iam/>IAM</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/2021/10/athena-and-macie/ class=prev rel=prev title="Athena and Macie"><i class="fas fa-angle-left fa-fw"></i>Athena and Macie</a></div>
+</div>
+<div id=comments><div id=disqus_thread class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><i class="fa fa-theater-masks"></i> </div><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.88.1">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/katex/katex.min.4710034e669c7ff17f823f9ba12cf8a36582d65b007f79cbc4a3c11d7db2e4ca.css integrity="sha256-RxADTmacf/F/gj+boSz4o2WC1lsAf3nLxKPBHX2y5Mo="><link rel=stylesheet href=/lib/katex/copy-tex.min.bf9ff4137fec38f6255419e142d0883c9c52090885d746f80eee12b273d9b3e0.css integrity="sha256-v5/0E3/sOPYlVBnhQtCIPJxSCQiF10b4Du4SsnPZs+A="><script type=text/javascript src=https://torres-blog.disqus.com/embed.js defer></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript src=/lib/sharer/sharer.min.9c88f86c7f0820287113f6236200459832693656e80d7556cc80a93dfbd45813.js integrity="sha256-nIj4bH8IIChxE/YjYgBFmDJpNlboDXVWzICpPfvUWBM="></script><script type=text/javascript src=/lib/typeit/typeit.min.491c13689db70b6adb3176a9a792644be7578a2f931521f5cb199d313a21c359.js integrity="sha256-SRwTaJ23C2rbMXapp5JkS+dXii+TFSH1yxmdMTohw1k="></script><script type=text/javascript src=/lib/katex/katex.min.17f5dd6b9f123dd7140abfb18521b3f4c036cd004f6f40121182a8865f140877.js integrity="sha256-F/Xda58SPdcUCr+xhSGz9MA2zQBPb0ASEYKohl8UCHc="></script><script type=text/javascript src=/lib/katex/auto-render.min.f74776a677f0d2be0af0264058f928e2ba455d0b19bc985304660d922a43a6b2.js integrity="sha256-90d2pnfw0r4K8CZAWPko4rpFXQsZvJhTBGYNkipDprI="></script><script type=text/javascript src=/lib/katex/copy-tex.min.2ab2237329021bc443986c8327f6e61357fb68a54e5d233d224023718c02207d.js integrity="sha256-KrIjcykCG8RDmGyDJ/bmE1f7aKVOXSM9IkAjcYwCIH0="></script><script type=text/javascript src=/lib/katex/mhchem.min.5cea356d6025c5a2f18c454c83ec5674dbb04fab1cd1d75569e77788c6b6f888.js integrity="sha256-XOo1bWAlxaLxjEVMg+xWdNuwT6sc0ddVaed3iMa2+Ig="></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:10},comment:{},data:{"id-1":"Torres","id-2":"Torres"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:50,type:"lunr"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>
