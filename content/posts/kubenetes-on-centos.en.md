@@ -1,8 +1,8 @@
 ---
 title: "Kubenetes on Centos"
 date: 2021-10-02T15:21:26+09:00
-tags: ["Cloud Native", "Kubernetes"]
-categories: ["Kubernetes"]
+tags: ["Kubernetes"]
+categories: ["Cloud Native"]
 draft: false
 author: "Torres"
 toc:

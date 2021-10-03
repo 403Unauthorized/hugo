@@ -3,8 +3,8 @@ title: "Aws S3 and Iam Summary"
 date: 2021-10-03T09:21:59+09:00
 draft: false
 author: Torres
-tags: [""]
-categories: [""]
+tags: ["S3", "IAM"]
+categories: ["AWS"]
 toc:
   enable: true
   auto: true

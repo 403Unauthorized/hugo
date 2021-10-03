@@ -4,7 +4,7 @@ date: 2021-10-03T00:07:29+09:00
 draft: false
 author: Torres
 tags: ["Spring Cloud", "Java"]
-categories: ["Programming"]
+categories: ["Programming", "Cloud Native"]
 toc:
   enable: true
   auto: true
