@@ -23,12 +23,12 @@ comment:
 
 ## Experience
 
-<div style="font-size: 16px; font-weight: bold">Rakuten Group, Inc. <span style="float: right">2021-04-01 ~ now</span></div>
+<div style="font-size: 20px; font-weight: bold">Rakuten Group, Inc. <span style="float: right">2021-04-01 ~ now</span></div>
 Applications Engineer - ECMPD
 
 - ...TODO
 
-<div style="font-size: 16px; font-weight: bold">Rakuten Group, Inc. <span style="float: right">2021-04-01 ~ now</span></div>
+<div style="font-size: 20px; font-weight: bold">Rakuten Group, Inc. <span style="float: right">2021-04-01 ~ now</span></div>
 Software Engineer
 
 - ...TODO

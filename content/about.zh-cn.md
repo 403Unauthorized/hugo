@@ -23,12 +23,12 @@ comment:
 
 ## 工作经验
 
-<div style="font-size: 16px; font-weight: bold">Rakuten Group, Inc. <span style="float: right">2021-04-01 ~ 现在</span></div>
+<div style="font-size: 20px; font-weight: bold">Rakuten Group, Inc. <span style="float: right">2021/04/01 ~ 现在</span></div>
 软件工程师 - ECMPD
 
 - ...TODO
 
-<div style="font-size: 16px; font-weight: bold">株式会社 C&J <span style="float: right">2019-12-26 ~ 2021-02-28</span></div>
+<div style="font-size: 20px; font-weight: bold">株式会社 C&J <span style="float: right">2019/12/26 ~ 2021/02/28</span></div>
 软件工程师
 
 - ...TODO
