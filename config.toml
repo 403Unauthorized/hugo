@@ -191,7 +191,7 @@ enableGitInfo = true
       # Gravatar 邮箱，用于优先在主页显示的头像
       gravatarEmail = ""
       # 主页显示头像的 URL
-      avatarURL = "/hugo/images/avatar.png"
+      avatarURL = "/images/avatar.png"
       # LoveIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
       title = "Hello, Cloud Native"
       # 主页显示的网站副标题
