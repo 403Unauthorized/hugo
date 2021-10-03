@@ -1,7 +1,7 @@
 ---
 title: "Aws S3 and Iam Summary"
 date: 2021-10-03T09:21:59+09:00
-draft: true
+draft: false
 author: Torres
 tags: [""]
 categories: [""]
