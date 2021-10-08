@@ -12,6 +12,8 @@ share:
   enable: true
 comment:
   enable: true
+featuredImage: "/images/posts/common/AWS_Logo.svg"
+featuredImagePreview: "/images/posts/common/AWS_Logo.svg"
 ---
 
 ## Athena
