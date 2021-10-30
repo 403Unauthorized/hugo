@@ -98,6 +98,7 @@ $$
 J(\theta_0, \theta_1,...,\theta_n) = \frac{1}{2m}\sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^2
 $$
 Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model:
+
 $$
 \begin{align}
 h_{\theta}(x) &= \theta_0 + \theta_1x \\
@@ -105,7 +106,9 @@ h_{\theta}(x) &= \theta_0 + \theta_1x \\
 &= \theta^{T}x
 \end{align}
 $$
+
 Then we can define uppercase X as "designed matrix", which contains all training examples:
+
 $$
 X = \left[
 \begin{matrix}
@@ -115,7 +118,8 @@ x_0^{3} & x_1^{3} &...& x_n^{3} \\
 ...&...&...&...\\
 x_0^{m} & x_1^{m} &...& x_n^{m} \\
 \end{matrix}
-\right],\space
+\right],
+\space
 y = \left[
 \begin{matrix}
 y^1\\
@@ -126,10 +130,13 @@ y^m
 \end{matrix}
 \right]
 $$
+
 So above cost function can be simplified as follows:
+
 $$
 J(\theta) = \frac{1}{2m}(\theta^{T}X - y)^2
 $$
+
 Finally we have the correct code:
 
 ```matlab
