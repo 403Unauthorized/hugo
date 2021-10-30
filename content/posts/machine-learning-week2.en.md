@@ -12,6 +12,8 @@ share:
   enable: true
 comment:
   enable: true
+featuredImage: "/images/posts/machine-learning-week2/cover.jpeg"
+featuredImagePreview: "/images/posts/machine-learning-week2/cover.jpeg"
 
 ---
 
@@ -100,35 +102,26 @@ $$
 Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model:
 
 $$
-\begin{align}
-h_{\theta}(x) &= \theta_0 + \theta_1x \\
+\begin{align} h_{\theta}(x) &= \theta_0 + \theta_1x \\
 &= h_{\theta}(x) = \theta_0x_0 + \theta_1x_1 \space \# x_0=1 \\
-&= \theta^{T}x
-\end{align}
+&= \theta^{T}x \end{align}
 $$
 
 Then we can define uppercase X as "designed matrix", which contains all training examples:
 
 $$
-X = \left[
-\begin{matrix}
-x_0^{1} & x_1^{1} &...& x_n^{1} \\
+X = \left[\\
+\begin{matrix} x_0^{1} & x_1^{1} &...& x_n^{1} \\
 x_0^{2} & x_1^{2} &...& x_n^{2} \\
 x_0^{3} & x_1^{3} &...& x_n^{3} \\
 ...&...&...&...\\
-x_0^{m} & x_1^{m} &...& x_n^{m} \\
-\end{matrix}
-\right],
-\space
-y = \left[
-\begin{matrix}
-y^1\\
+x_0^{m} & x_1^{m} &...& x_n^{m} \end{matrix}\right],\space y = \left[ \\
+\begin{matrix} y^1\\
 y^2\\
 y^3\\
 ...\\
-y^m
-\end{matrix}
-\right]
+y^m \\
+\end{matrix}\right]
 $$
 
 So above cost function can be simplified as follows:
