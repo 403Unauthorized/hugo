@@ -26,14 +26,14 @@ In this exercise, you need to implement one variable linear regression. The cour
 - ex1data1.txt - Dataset for linear regression with one variable 
 - ex1data2.txt - Dataset for linear regression with multiple variables 
 - submit.m - Submission script that sends your solutions to our servers
-- [[\*] warmUpExercise.m - Simple example function in Octave/MATLAB](#Warm Up Exercise)
-- [[\*] plotData.m - Function to display the dataset](#Plot Data)
-- [[\*] computeCost.m - Function to compute the cost of linear regression](#Compute\ Cost\ Function)
-- [[\*] gradientDescent.m - Function to run gradient descent](#Gradient Descent)
-- [†] computeCostMulti.m - Cost function for multiple variables
-- [†] gradientDescentMulti.m - Gradient descent for multiple variables
-- [†] featureNormalize.m - Function to normalize features
-- [†] normalEqn.m - Function to compute the normal equations
+- [(\*) warmUpExercise.m - Simple example function in Octave/MATLAB](#Warm Up Exercise)
+- [(\*) plotData.m - Function to display the dataset](#Plot Data)
+- [(\*) computeCost.m - Function to compute the cost of linear regression](#Compute\ Cost\ Function)
+- [(\*) gradientDescent.m - Function to run gradient descent](#Gradient Descent)
+- (†) computeCostMulti.m - Cost function for multiple variables
+- (†) gradientDescentMulti.m - Gradient descent for multiple variables
+- (†) featureNormalize.m - Function to normalize features
+- (†) normalEqn.m - Function to compute the normal equations
 
 > \* indicates files you will need to complete 
 > † indicates optional exercises
@@ -97,13 +97,13 @@ Cost function is one of the important parts in week 2. Following is the formula 
 $$
 J(\theta_0, \theta_1,...,\theta_n) = \frac{1}{2m}\sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^2
 $$
-Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model to following:
+Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model:
 $$
-\begin{align*}
+\begin{align}
 h_{\theta}(x) &= \theta_0 + \theta_1x \\
 &= h_{\theta}(x) = \theta_0x_0 + \theta_1x_1 \space \# x_0=1 \\
 &= \theta^{T}x
-\end{align*}
+\end{align}
 $$
 Then we can define uppercase X as "designed matrix", which contains all training examples:
 $$
