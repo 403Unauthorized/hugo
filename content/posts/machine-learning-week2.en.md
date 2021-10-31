@@ -181,3 +181,54 @@ As Andrew mentioned in video lecture we need to **simultaneously** update $\thet
 
 ## Linear Regression with Multiple Variables (Optional)
 
+Because cost function and gradient descent algorithm above are compatible for multiple variables, we just need to copy the implementations to respective files.
+
+## Normal Equation
+
+When Professor Andrew was teaching about Normal Equation, I was not understand well about the derivation of cost function. But now I worked it out.
+
+Recall the cost function: $J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x) - y)^2$.
+
+We can vectorized it to: $J(\theta) = \frac{1}{2m}(X\theta - y)^T(X\theta - y)$.
+
+To solve each $\theta$, we set partial derivative with respect to each $\theta$ equals to 0: $\frac{\partial}{\partial_{\theta}}J(\theta) = 0$.
+
+To derive the equation, we get: $\theta = (X^TX)^{-1}X^Ty$.
+
+So far, we got the equation that how to compute $\theta$. Let's see how to code:
+
+```matlab
+function [theta] = normalEqn(X, y)
+%NORMALEQN Computes the closed-form solution to linear regression 
+%   NORMALEQN(X,y) computes the closed-form solution to linear 
+%   regression using the normal equations.
+
+theta = zeros(size(X, 2), 1);
+
+% ====================== YOUR CODE HERE ======================
+% Instructions: Complete the code to compute the closed form solution
+%               to linear regression and put the result in theta.
+%
+
+% ---------------------- Sample Solution ----------------------
+
+theta = pinv(X' * X) * X' * y;
+
+% -------------------------------------------------------------
+
+
+% ============================================================
+
+end
+```
+
+## Final
+
+After finished all the files, I submitted my assignment.
+
+![submission](/images/posts/machine-learning-week2/submission.png)
+
+
+
+**Congratulations, you have done the assignment of Week 2!**
+
