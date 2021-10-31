@@ -14,6 +14,7 @@ comment:
   enable: true
 featuredImage: "/images/posts/machine-learning-week2/cover.jpeg"
 featuredImagePreview: "/images/posts/machine-learning-week2/cover.jpeg"
+math: true
 
 ---
 
@@ -101,9 +102,14 @@ J(\theta_0, \theta_1,...,\theta_n) = \frac{1}{2m}\sum_{i=1}^{m}(h_{\theta}(x^{(i
 $$
 Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model:
 
+$$
 \begin{align}
+
 h_{\theta}(x) &= \theta_{0} + \theta_{1}x \newline &= \theta_{0}x_{0} + \theta_{1}x_{1} \newline &= X\theta
+
 \end{align}
+$$
+
 
 Then we can define uppercase X as "designed matrix", which contains all training examples:
 
