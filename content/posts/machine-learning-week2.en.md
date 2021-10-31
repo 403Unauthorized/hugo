@@ -98,16 +98,14 @@ end
 Cost function is one of the important parts in week 2. Following is the formula of cost function:
 $$
 J(\theta_0, \theta_1,...,\theta_n) = \frac{1}{2m}\sum_{i=1}^{m}(h_{\theta}(x^{(i)}) - y^{(i)})^2
-$$
-Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model:
 
-$$
-\begin{align}
+,\begin{align}
 h_{\theta}(x) &= \theta_{0} + \theta_{1}x \newline
 &= \theta_{0}x_{0} + \theta_{1}x_{1} \space\space *(x_{0} = 1) \newline
 &= X\theta
 \end{align}
 $$
+Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model:
 
 ![Hypothesis Derivation](/images/posts/machine-learning-week2/hypothesis.png)
 
