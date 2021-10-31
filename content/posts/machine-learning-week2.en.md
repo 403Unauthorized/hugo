@@ -103,11 +103,7 @@ $$
 Because we had $h_{\theta}(x) = \theta_0 + \theta_1x$, it equals to $h_{\theta}(x) = \theta_0x_0 + \theta_1x_1$ where $x_0 = 1$. So we can simplify the linear model:
 
 $$
-\begin{align}
-
-h_{\theta}(x) &= \theta_{0} + \theta_{1}x \newline &= \theta_{0}x_{0} + \theta_{1}x_{1} \newline &= X\theta
-
-\end{align}
+h_{\theta}(x) = \theta_{0} + \theta_{1}x = \theta_{0}x_{0} + \theta_{1}x_{1} = X\theta
 $$
 
 
