@@ -44,6 +44,14 @@ enableGitInfo = true
       url = "/about/"
       title = ""
       weight = 4
+    [[languages.en.menu.main]]
+      identifier = "leetcode"
+      pre = ""
+      post = ""
+      name = "Leetcode Algo"
+      url = "/algo/"
+      title = ""
+      weight = 5
 
   [languages.zh-cn]
     weight = 2
@@ -85,6 +93,14 @@ enableGitInfo = true
       url = "/about/"
       title = ""
       weight = 4
+    [[languages.zh-cn.menu.main]]
+      identifier = "leetcode"
+      pre = ""
+      post = ""
+      name = "Leetcode刷题指南"
+      url = "/algo/"
+      title = ""
+      weight = 5
 
 [params]
   # LoveIt 主题版本
