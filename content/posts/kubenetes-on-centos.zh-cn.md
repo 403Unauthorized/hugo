@@ -16,7 +16,7 @@ featuredImagePreview: "/images/posts/kubernetes-on-centos/kubernetes-on-centos.p
 featuredImage: "/images/posts/kubernetes-on-centos/kubernetes-on-centos.png"
 ---
 
-## 前提条件
+# 前提条件
 
 - 一个 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版提供了通用的说明。
 - 每个机器至少 2GB 的内存。
@@ -26,7 +26,7 @@ featuredImage: "/images/posts/kubernetes-on-centos/kubernetes-on-centos.png"
 - 指定的端口在机器上是开放的。点击[这里](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports)查看具体信息。
 - 禁用 Swap。为了使 kubectl 正常工作，必须禁用 swap。
 
-### 让 iptables 能发现桥接网络的流量
+## 让 iptables 能发现桥接网络的流量
 
 确保 `br_netfilter` 模块被装载了。可以通过以下命令来完成：
 
@@ -49,15 +49,15 @@ EOF
 sudo sysctl --system
 ```
 
-### 检查需要的端口
+## 检查需要的端口
 
-### 安装 Docker
+## 安装 Docker
 
 参考：[Install Docker Engine on CentOS](https://docs.docker.com/engine/install/centos/) 
 
-## 安装 Kubernetes
+# 安装 Kubernetes
 
-### 准备 Kubernetes 服务器
+## 准备 Kubernetes 服务器
 
 | **服务器类型** | **主机名**   | **具体信息**    |
 | :------------- | :----------- | :-------------- |
@@ -65,7 +65,7 @@ sudo sysctl --system
 | Worker         | 192.168.2.61 | 2 CPUs, 2GB Ram |
 | Worker         | 192.168.2.62 | 2 CPUs, 2GB Ram |
 
-### 安装 kubelet 和 kubeadm
+## 安装 kubelet 和 kubeadm
 
 ```bash
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
@@ -84,7 +84,7 @@ sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 sudo systemctl enable --now kubelet
 ```
 
-### 禁用 SELinux 和 Swap
+## 禁用 SELinux 和 Swap
 
 ```bash
 # Set SELinux in permissive mode (effectively disabling it)
@@ -96,7 +96,7 @@ sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 sudo swapoff -a
 ```
 
-## 配置防火墙
+# 配置防火墙
 
 **启用 Master 节点端口**:
 
@@ -114,11 +114,11 @@ sudo firewall-cmd --add-port={4789,8285,8472}/udp --permanent
 sudo firewall-cmd --reload
 ```
 
-## 验证安装是否成功
+# 验证安装是否成功
 
 为了验证安装是否成功，我们准备用 **kubeadm** 创建一个 cluster。
 
-### 初始化 Kubernetes Control Plane (K8s 控制平面)
+## 初始化 Kubernetes Control Plane (K8s 控制平面)
 
 首先，向 `/etc/hosts` 中添加下面的主机名：
 
@@ -232,7 +232,7 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-### 验证
+## 验证
 
 运行以下指令来验证集群是否初始化成功：
 
