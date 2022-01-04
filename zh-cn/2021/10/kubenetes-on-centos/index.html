@@ -9,7 +9,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="http://403unauthorized.github.io/zh-cn/2021/10/kubenetes-on-centos/"><meta property="og:image" content="http://403unauthorized.github.io/logo.ico"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2021-10-02T15:21:31+09:00">
-<meta property="article:modified_time" content="2021-10-03T11:17:31+09:00"><meta property="og:site_name" content="Torres' 技术博客">
+<meta property="article:modified_time" content="2022-01-04T14:20:35+09:00"><meta property="og:site_name" content="Torres' 技术博客">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="http://403unauthorized.github.io/logo.ico">
 <meta name=twitter:title content="Kubenetes on Centos">
@@ -17,7 +17,7 @@
 <meta name=application-name content="Torres' Blog">
 <meta name=apple-mobile-web-app-title content="Torres' Blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/zh-cn/2021/10/kubenetes-on-centos/><link rel=prev href=http://403unauthorized.github.io/zh-cn/2021/10/golang-fundamentals/><link rel=next href=http://403unauthorized.github.io/zh-cn/2021/10/java-garbage-collection/><link rel=stylesheet href=/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubenetes on Centos","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/kubenetes-on-centos\/"},"genre":"posts","keywords":"Kubernetes","wordcount":1476,"url":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/kubenetes-on-centos\/","datePublished":"2021-10-02T15:21:31+09:00","dateModified":"2021-10-03T11:17:31+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://403unauthorized.github.io/zh-cn/2021/10/kubenetes-on-centos/><link rel=prev href=http://403unauthorized.github.io/zh-cn/2021/10/golang-fundamentals/><link rel=next href=http://403unauthorized.github.io/zh-cn/2021/10/java-garbage-collection/><link rel=stylesheet href=/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubenetes on Centos","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/kubenetes-on-centos\/"},"genre":"posts","keywords":"Kubernetes","wordcount":1476,"url":"http:\/\/403unauthorized.github.io\/zh-cn\/2021\/10\/kubenetes-on-centos\/","datePublished":"2021-10-02T15:21:31+09:00","dateModified":"2022-01-04T14:20:35+09:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Torres"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -98,8 +98,6 @@
 </div>
 <div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
 <ul>
-<li>
-<ul>
 <li><a href=#前提条件>前提条件</a>
 <ul>
 <li><a href=#让-iptables-能发现桥接网络的流量>让 iptables 能发现桥接网络的流量</a></li>
@@ -122,10 +120,8 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 </nav></div>
-</div><div class=content id=content><h2 id=前提条件>前提条件</h2>
+</div><div class=content id=content><h1 id=前提条件>前提条件</h1>
 <ul>
 <li>一个 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版提供了通用的说明。</li>
 <li>每个机器至少 2GB 的内存。</li>
@@ -135,7 +131,7 @@
 <li>指定的端口在机器上是开放的。点击<a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports target=_blank rel="noopener noreffer">这里</a>查看具体信息。</li>
 <li>禁用 Swap。为了使 kubectl 正常工作，必须禁用 swap。</li>
 </ul>
-<h3 id=让-iptables-能发现桥接网络的流量>让 iptables 能发现桥接网络的流量</h3>
+<h2 id=让-iptables-能发现桥接网络的流量>让 iptables 能发现桥接网络的流量</h2>
 <p>确保 <code>br_netfilter</code> 模块被装载了。可以通过以下命令来完成：</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -172,11 +168,11 @@ sudo modprobe br_netfilter
 sudo sysctl --system
 </code></pre></td></tr></table>
 </div>
-</div><h3 id=检查需要的端口>检查需要的端口</h3>
-<h3 id=安装-docker>安装 Docker</h3>
+</div><h2 id=检查需要的端口>检查需要的端口</h2>
+<h2 id=安装-docker>安装 Docker</h2>
 <p>参考：<a href=https://docs.docker.com/engine/install/centos/ target=_blank rel="noopener noreffer">Install Docker Engine on CentOS</a></p>
-<h2 id=安装-kubernetes>安装 Kubernetes</h2>
-<h3 id=准备-kubernetes-服务器>准备 Kubernetes 服务器</h3>
+<h1 id=安装-kubernetes>安装 Kubernetes</h1>
+<h2 id=准备-kubernetes-服务器>准备 Kubernetes 服务器</h2>
 <table>
 <thead>
 <tr>
@@ -203,7 +199,7 @@ sudo sysctl --system
 </tr>
 </tbody>
 </table>
-<h3 id=安装-kubelet-和-kubeadm>安装 kubelet 和 kubeadm</h3>
+<h2 id=安装-kubelet-和-kubeadm>安装 kubelet 和 kubeadm</h2>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
 <pre tabindex=0 class=chroma><code><span class=lnt> 1
@@ -238,7 +234,7 @@ sudo yum install -y kubelet kubeadm kubectl --disableexcludes<span class=o>=</sp
 sudo systemctl <span class=nb>enable</span> --now kubelet
 </code></pre></td></tr></table>
 </div>
-</div><h3 id=禁用-selinux-和-swap>禁用 SELinux 和 Swap</h3>
+</div><h2 id=禁用-selinux-和-swap>禁用 SELinux 和 Swap</h2>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
 <pre tabindex=0 class=chroma><code><span class=lnt>1
@@ -259,7 +255,7 @@ sudo sed -i <span class=s1>&#39;/ swap / s/^\(.*\)$/#\1/g&#39;</span> /etc/fstab
 sudo swapoff -a
 </code></pre></td></tr></table>
 </div>
-</div><h2 id=配置防火墙>配置防火墙</h2>
+</div><h1 id=配置防火墙>配置防火墙</h1>
 <p><strong>启用 Master 节点端口</strong>:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -286,9 +282,9 @@ sudo firewall-cmd --add-port<span class=o>={</span>4789,8285,8472<span class=o>}
 sudo firewall-cmd --reload
 </code></pre></td></tr></table>
 </div>
-</div><h2 id=验证安装是否成功>验证安装是否成功</h2>
+</div><h1 id=验证安装是否成功>验证安装是否成功</h1>
 <p>为了验证安装是否成功，我们准备用 <strong>kubeadm</strong> 创建一个 cluster。</p>
-<h3 id=初始化-kubernetes-control-plane-k8s-控制平面>初始化 Kubernetes Control Plane (K8s 控制平面)</h3>
+<h2 id=初始化-kubernetes-control-plane-k8s-控制平面>初始化 Kubernetes Control Plane (K8s 控制平面)</h2>
 <p>首先，向 <code>/etc/hosts</code> 中添加下面的主机名：</p>
 <blockquote>
 <p>192.168.2.60 k8s-master01 k8s-master01.torres.com</p>
@@ -500,7 +496,7 @@ sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
 sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
 </code></pre></td></tr></table>
 </div>
-</div><h3 id=验证>验证</h3>
+</div><h2 id=验证>验证</h2>
 <p>运行以下指令来验证集群是否初始化成功：</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -539,8 +535,8 @@ localhost.localdomain   NotReady   control-plane,master   3m15s   v1.21.1
 <div class=post-info>
 <div class=post-info-line>
 <div class=post-info-mod>
-<span>更新于 2021-10-03&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/7ce900bd7319700e052787a5b3d75ae86f913a9f target=_blank title="commit by Yongqi Lei(leiyongqi1026@gmail.com) 7ce900bd7319700e052787a5b3d75ae86f913a9f: Update tags and categories of each article">
-<i class="fas fa-hashtag fa-fw"></i>7ce900b</a></span>
+<span>更新于 2022-01-04&nbsp;<a class=git-hash href=https://github.com/403Unauthorized/hugo/commit/6c0270dd0b53aa6377ab64604ad978a50e073692 target=_blank title="commit by Torres(25628561+403Unauthorized@users.noreply.github.com) 6c0270dd0b53aa6377ab64604ad978a50e073692: Update kubenetes-on-centos.zh-cn.md">
+<i class="fas fa-hashtag fa-fw"></i>6c0270d</a></span>
 </div>
 <div class=post-info-license></div>
 </div>
@@ -564,8 +560,8 @@ localhost.localdomain   NotReady   control-plane,master   3m15s   v1.21.1
 Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.
 </noscript></div></article></div>
 </main><footer class=footer>
-<div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.89.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/zh-cn/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+<div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.91.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/zh-cn/ target=_blank>Torres</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
 </div>
 </footer></div>
 <div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
